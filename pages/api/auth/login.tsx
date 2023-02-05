@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
-import initializeFirebaseServer from '../../../firebase/initAdmin';
+import initializeFirebaseServer from '../../../src/firebase/initAdmin';
 import cors from '../../../src/utils/cors';
 
 const { PRIVATE_KEY, DOMAIN, NETWORK } = process.env;
