@@ -3,21 +3,20 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import cors from 'src/utils/cors';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 
+const { MARKETPLACE, NETWORK } = process.env;
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  await cors(req, res);
   try {
-    await cors(req, res);
-    const sdk = new ThirdwebSDK('mumbai');
-
-    const contract = await sdk.getContract(`${process.env.MARKETPLACE}`, 'marketplace');
-
+    if (!NETWORK || !MARKETPLACE) {
+      return res.status(500).send('Missing required environment variables');
+    }
+    const sdk = new ThirdwebSDK(NETWORK);
+    const contract = await sdk.getContract(MARKETPLACE, 'marketplace');
     const listings = await contract.getActiveListings();
-
-    const { address, name } = req.query;
-
+    const { name } = req.query;
     const cleanQuery = `${name}`.toLowerCase().trim();
-
     const nfts: any = [];
-
     listings.forEach((listing: any) => {
       if (!name) {
         return nfts.push(listing);
@@ -26,7 +25,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return nfts.push(listing);
       }
     });
-
     res.status(200).json({ nfts });
   } catch (error) {
     console.error(error);

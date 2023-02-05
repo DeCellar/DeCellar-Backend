@@ -10,15 +10,21 @@ import { ThirdwebSDK } from '@thirdweb-dev/sdk';
    the auctioned items. 
    */
 }
+const { MARKETPLACE, NETWORK } = process.env;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
-  const sdk = new ThirdwebSDK('mumbai');
-
-  const contract = await sdk.getContract(`${process.env.MARKETPLACE}`, 'marketplace');
-
-  const { bufferBps } = req.query;
-
-  const setBidBuffer = await contract.setBidBufferBps(bufferBps as any);
-  res.status(200).json({ setBidBuffer });
+  try {
+    if (!NETWORK || !MARKETPLACE) {
+      return res.status(500).send('Missing required environment variables');
+    }
+    const sdk = new ThirdwebSDK(NETWORK);
+    const contract = await sdk.getContract(MARKETPLACE, 'marketplace');
+    const { bufferBps } = req.query;
+    const setBidBuffer = await contract.setBidBufferBps(bufferBps as any);
+    res.status(200).json({ setBidBuffer });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Internal Server Error');
+  }
 }

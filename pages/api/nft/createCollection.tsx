@@ -2,19 +2,20 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import cors from 'src/utils/cors';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 
-const { NETWORK, NFT_COLLECTION } = process.env;
+const { NETWORK } = process.env;
+
+// ----------------------------------------------------------------------
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
   try {
-    if (!NETWORK || !NFT_COLLECTION) {
-      return res.status(500).send('Missing required environment variables');
+    if (!NETWORK) {
+      return res.status(500).send('Missing required environment variable: NETWORK');
     }
     const sdk = new ThirdwebSDK(NETWORK);
-    const contract = await sdk.getContract(NFT_COLLECTION, 'nft-collection');
-    const { tokenId } = req.query;
-    const nft = await contract.get(tokenId as string);
-    res.status(200).json({ nft });
+    const { metadata } = req.query;
+    const createCollection = await sdk.deployer.deployNFTCollection(metadata as any);
+    return res.status(200).json({ createCollection });
   } catch (error) {
     console.error(error);
     return res.status(500).send('Internal Server Error');

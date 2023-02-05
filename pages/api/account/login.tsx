@@ -1,29 +1,41 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 import initializeFirebaseServer from '../../../firebase/initAdmin';
-// utils
 import cors from '../../../src/utils/cors';
 
-export default async function login(req: NextApiRequest, res: NextApiResponse) {
-  await cors(req, res);
-  // Grab the login payload the user sent us with their request.
-  const loginPayload = req.body.payload;
-  // Set this to your domain to prevent signature malleability attacks.
-  const domain = 'http://localhost';
+const { PRIVATE_KEY, DOMAIN, NETWORK } = process.env;
 
-  const sdk = ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY!, 'mumbai');
+/**
+ * Handle user login request
+ * @param req - Next.js API request object
+ * @param res - Next.js API response object
+ */
+export default async function handleLogin(req: NextApiRequest, res: NextApiResponse) {
+  // Apply CORS
+  await cors(req, res);
+
+  if (!NETWORK || !PRIVATE_KEY || !DOMAIN) {
+    return res.status(500).send('Missing required environment variables');
+  }
+  // Retrieve login payload from user's request
+  const loginPayload = req.body.payload;
+
+  // Initialize Thirdweb SDK
+  const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY!, NETWORK);
+
+  // Verify the address of the client-side wallet
   let address;
   try {
-    // Verify the address of the logged in client-side wallet by validating the provided client-side login request.
-    address = sdk.auth.verify(domain, loginPayload);
+    address = sdk.auth.verify(DOMAIN, loginPayload);
   } catch (err) {
     console.error(err);
     return res.status(401).send('Unauthorized');
   }
 
+  // Initialize Firebase Server
   const { auth } = initializeFirebaseServer();
   const token = await auth.createCustomToken(address);
 
-  // Send the token to the client to sign in with.
+  // Return the token to the client
   return res.status(200).json({ token });
 }

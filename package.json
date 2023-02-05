@@ -18,8 +18,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@thirdweb-dev/react": "^3.6.7",
-    "@thirdweb-dev/sdk": "^3.6.7",
+    "@thirdweb-dev/sdk": "3.6.6",
     "axios": "^0.24.0",
     "change-case": "^4.1.2",
     "cors": "^2.8.5",
