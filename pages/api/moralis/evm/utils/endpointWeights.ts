@@ -1,12 +1,13 @@
 import Moralis from 'moralis';
 import { NextApiRequest, NextApiResponse } from 'next';
 import type { endpointWeightsParams } from 'src/@types/evm';
-
+import cors from 'src/utils/cors';
 interface endpointWeightsRequest extends NextApiRequest {
   body: endpointWeightsParams;
 }
 
 export default async function handler(req: endpointWeightsRequest, res: NextApiResponse) {
+  await cors(req, res);
   const {} = req.body;
 
   await Moralis.start({ apiKey: process.env.MORALIS_API });

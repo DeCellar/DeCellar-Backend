@@ -1,12 +1,13 @@
 import Moralis from 'moralis';
 import { NextApiRequest, NextApiResponse } from 'next';
 import type { getWalletTransactionsParams } from 'src/@types/evm';
-
+import cors from 'src/utils/cors';
 interface getWalletTransactionsRequest extends NextApiRequest {
   body: getWalletTransactionsParams;
 }
 
 export default async function handler(req: getWalletTransactionsRequest, res: NextApiResponse) {
+  await cors(req, res);
   const { address, chain, cursor, fromBlock, fromDate, limit, toBlock, toDate } = req.body;
 
   await Moralis.start({ apiKey: process.env.MORALIS_API });

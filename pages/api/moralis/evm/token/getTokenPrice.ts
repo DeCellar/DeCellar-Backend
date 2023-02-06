@@ -1,12 +1,13 @@
 import Moralis from 'moralis';
 import { NextApiRequest, NextApiResponse } from 'next';
 import type { getTokenPriceParams } from 'src/@types/evm';
-
+import cors from 'src/utils/cors';
 interface getTokenPriceRequest extends NextApiRequest {
   body: getTokenPriceParams;
 }
 
 export default async function handler(req: getTokenPriceRequest, res: NextApiResponse) {
+  await cors(req, res);
   const { address, chain, exchange, toBlock } = req.body;
 
   await Moralis.start({ apiKey: process.env.MORALIS_API });

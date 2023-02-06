@@ -1,12 +1,13 @@
 import Moralis from 'moralis';
 import { NextApiRequest, NextApiResponse } from 'next';
 import type { getTransactionParams } from 'src/@types/evm';
-
+import cors from 'src/utils/cors';
 interface getTransactionRequest extends NextApiRequest {
   body: getTransactionParams;
 }
 
 export default async function handler(req: getTransactionRequest, res: NextApiResponse) {
+  await cors(req, res);
   const { chain, transactionHash } = req.body;
 
   await Moralis.start({ apiKey: process.env.MORALIS_API });

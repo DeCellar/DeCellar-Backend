@@ -1,12 +1,13 @@
 import Moralis from 'moralis';
 import { NextApiRequest, NextApiResponse } from 'next';
 import type { web3ApiVersionParams } from 'src/@types/evm';
-
+import cors from 'src/utils/cors';
 interface web3ApiVersionRequest extends NextApiRequest {
   body: web3ApiVersionParams;
 }
 
 export default async function handler(req: web3ApiVersionRequest, res: NextApiResponse) {
+  await cors(req, res);
   const {} = req.body;
 
   await Moralis.start({ apiKey: process.env.MORALIS_API });

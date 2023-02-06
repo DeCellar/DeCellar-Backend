@@ -1,12 +1,13 @@
 import Moralis from 'moralis';
 import { NextApiRequest, NextApiResponse } from 'next';
 import type { uploadFolderParams } from 'src/@types/evm';
-
+import cors from 'src/utils/cors';
 interface uploadFolderRequest extends NextApiRequest {
   body: uploadFolderParams;
 }
 
 export default async function handler(req: uploadFolderRequest, res: NextApiResponse) {
+  await cors(req, res);
   const { abi } = req.body;
   await Moralis.start({ apiKey: process.env.MORALIS_API });
 

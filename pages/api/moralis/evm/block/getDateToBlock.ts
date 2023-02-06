@@ -1,12 +1,13 @@
 import Moralis from 'moralis';
 import { NextApiRequest, NextApiResponse } from 'next';
 import type { getDateToBlockParams } from 'src/@types/evm';
-
+import cors from 'src/utils/cors';
 interface getDateToBlockRequest extends NextApiRequest {
   body: getDateToBlockParams;
 }
 
 export default async function handler(req: getDateToBlockRequest, res: NextApiResponse) {
+  await cors(req, res);
   const { chain, date } = req.body;
   await Moralis.start({ apiKey: process.env.MORALIS_API });
 
