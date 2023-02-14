@@ -4,24 +4,35 @@ import initializeFirebaseServer from '../../../src/firebase/initAdmin';
 import cors from '../../../src/utils/cors';
 
 /**
- * Handle user login request
- * @param req - Next.js API request object
- * @param res - Next.js API response object
+ * Handles login requests and returns a JWT token for the user.
+ * @param req - The Next.js API request object.
+ * @param res - The Next.js API response object.
  */
-export default async function login(req: NextApiRequest, res: NextApiResponse) {
-  // Apply CORS
-  await cors(req, res);
+export default async function handleLoginRequest(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    // Apply CORS to the response.
+    await cors(req, res);
 
-  const user = await getUser(req);
+    // Get the user from the request.
+    const user = await getUser(req);
 
-  if (!user) return res.status(401).json({ error: 'Unauthorized!' });
+    // If the user is not found, return an unauthorized error response.
+    if (!user) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
 
-  // Initialize the Firebase Admin SDK.
-  const { auth } = initializeFirebaseServer();
+    // Initialize the Firebase Admin SDK.
+    const { auth } = initializeFirebaseServer();
 
-  // Generate a JWT token for the user to be used on the client-side.
-  const token = await auth.createCustomToken(user?.address);
+    // Generate a JWT token for the user to be used on the client-side.
+    const token = await auth.createCustomToken(user.address);
 
-  // Send the token to the client-side.
-  return res.status(200).json({ token });
+    // Send the token to the client-side.
+    res.status(200).json({ token });
+  } catch (error) {
+    // Handle any errors that occur during the request.
+    console.error(`Error handling login request: ${error}`);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 }
