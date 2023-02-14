@@ -1,41 +1,27 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { ThirdwebSDK } from '@thirdweb-dev/sdk';
+import { getUser } from './thirdweb';
 import initializeFirebaseServer from '../../../src/firebase/initAdmin';
 import cors from '../../../src/utils/cors';
-
-const { PRIVATE_KEY, DOMAIN, NETWORK } = process.env;
 
 /**
  * Handle user login request
  * @param req - Next.js API request object
  * @param res - Next.js API response object
  */
-export default async function handleLogin(req: NextApiRequest, res: NextApiResponse) {
+export default async function login(req: NextApiRequest, res: NextApiResponse) {
   // Apply CORS
   await cors(req, res);
 
-  if (!NETWORK || !PRIVATE_KEY || !DOMAIN) {
-    return res.status(500).send('Missing required environment variables');
-  }
-  // Retrieve login payload from user's request
-  const loginPayload = req.body.payload;
+  const user = await getUser(req);
 
-  // Initialize Thirdweb SDK
-  const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY!, NETWORK);
+  if (!user) return res.status(401).json({ error: 'Unauthorized!' });
 
-  // Verify the address of the client-side wallet
-  let address;
-  try {
-    address = sdk.auth.verify(DOMAIN, loginPayload);
-  } catch (err) {
-    console.error(err);
-    return res.status(401).send('Unauthorized');
-  }
-
-  // Initialize Firebase Server
+  // Initialize the Firebase Admin SDK.
   const { auth } = initializeFirebaseServer();
-  const token = await auth.createCustomToken(address);
 
-  // Return the token to the client
+  // Generate a JWT token for the user to be used on the client-side.
+  const token = await auth.createCustomToken(user?.address);
+
+  // Send the token to the client-side.
   return res.status(200).json({ token });
 }
