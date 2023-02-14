@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getUser } from './thirdweb';
+import { getUser } from './thirdweb/[...thirdweb]';
 import initializeFirebaseServer from '../../../src/firebase/initAdmin';
 import cors from '../../../src/utils/cors';
 
