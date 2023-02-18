@@ -8,7 +8,7 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
   // Grab the login payload the user sent us with their request.
   const payload = req.body.payload;
 
-  const { address, error } = await verifyLogin('nftpub.it', payload);
+  const { address, error } = await verifyLogin('api.nftpub.it', payload);
   if (!address) {
     return res.status(401).json({ error });
   }
