@@ -6,8 +6,8 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   env: {
-    DEV_API: 'https://api.nftpub.it',
-    PRODUCTION_API: 'https://api.nftpub.it',
+    DEV_API: 'http://localhost:3000',
+    PRODUCTION_API: process.env.PRODUCTION_API,
     PRIVATE_KEY: process.env.PRIVATE_KEY,
     // FIREBASE
     FIREBASE_CLIENT_EMAIL: process.env.FIREBASE_CLIENT_EMAIL,
