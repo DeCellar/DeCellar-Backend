@@ -1,4 +1,4 @@
-import { HOST_API } from '../config';
+import { HOST_API, DOMAIN } from '../config';
 
 export default function IndexPage() {
   return (
@@ -9,8 +9,8 @@ export default function IndexPage() {
         functionality by creating new API routes in the <code>pages/api</code> directory.
       </p>
       <p style={styles.text}>
-        The <code>HOST_API</code> variable is currently set to <code>{HOST_API}</code>. You can
-        modify this variable in the <code>config.js</code> file to change the base URL for your API.
+        The <code>HOST_API</code> variable is currently set to <code>{HOST_API}</code>. The{' '}
+        <code>DOMAIN</code> variable is currently set to <code>{DOMAIN}</code>.
       </p>
     </div>
   );

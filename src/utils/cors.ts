@@ -1,5 +1,6 @@
 import Cors from 'cors';
 import initMiddleware from './init-middleware';
+import { DOMAIN } from '../../config';
 
 // Initialize the cors middleware
 const cors = initMiddleware(
@@ -7,7 +8,8 @@ const cors = initMiddleware(
   Cors({
     // Only allow requests with GET, POST and OPTIONS
     methods: ['GET', 'POST', 'OPTIONS'],
-    origin: '*',
+    origin: DOMAIN || '*',
+    credentials: true,
   })
 );
 

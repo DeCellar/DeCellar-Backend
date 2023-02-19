@@ -8,6 +8,9 @@ const nextConfig = {
   env: {
     DEV_API: 'http://localhost:3000',
     PRODUCTION_API: process.env.PRODUCTION_API,
+    DEV_DOMAIN: 'http://localhost:8081',
+    PRODUCTION_DOMAIN: process.env.PRODUCTION_DOMAIN,
+
     PRIVATE_KEY: process.env.PRIVATE_KEY,
     // FIREBASE
     FIREBASE_CLIENT_EMAIL: process.env.FIREBASE_CLIENT_EMAIL,
@@ -20,8 +23,6 @@ const nextConfig = {
     // NFT
     NFT_COLLECTION: process.env.NFT_COLLECTION,
     MARKETPLACE: process.env.MARKETPLACE,
-
-    DOMAIN: process.env.DOMAIN,
   },
 };
 
