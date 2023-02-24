@@ -6,7 +6,7 @@ import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
-  const sdk = new ThirdwebSDK('mumbai');
+  const sdk = new ThirdwebSDK(process.env.NETWORK as string);
 
   const contract = await sdk.getContract(`${process.env.MARKETPLACE}`, 'marketplace');
 
