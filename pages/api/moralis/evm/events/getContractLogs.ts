@@ -9,7 +9,6 @@ interface getContractLogsRequest extends NextApiRequest {
 export default async function handler(req: getContractLogsRequest, res: NextApiResponse) {
   await cors(req, res);
   const { address, chain, cursor, limit } = req.body;
-  await Moralis.start({ apiKey: process.env.MORALIS_API });
 
   try {
     const data = await Moralis.EvmApi.events.getContractLogs({

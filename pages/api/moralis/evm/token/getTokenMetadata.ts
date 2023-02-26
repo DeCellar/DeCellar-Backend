@@ -10,8 +10,6 @@ export default async function handler(req: getTokenMetadataRequest, res: NextApi
   await cors(req, res);
   const { addresses, chain } = req.body;
 
-  await Moralis.start({ apiKey: process.env.MORALIS_API });
-
   try {
     const data = await Moralis.EvmApi.token.getTokenMetadata({
       addresses,

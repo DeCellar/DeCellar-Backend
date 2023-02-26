@@ -10,8 +10,6 @@ export default async function handler(req: runContractFunctionRequest, res: Next
   await cors(req, res);
   const { abi, address, chain, functionName, params } = req.body;
 
-  await Moralis.start({ apiKey: process.env.MORALIS_API });
-
   try {
     const data = await Moralis.EvmApi.utils.runContractFunction({
       abi,

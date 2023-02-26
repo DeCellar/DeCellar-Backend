@@ -9,7 +9,6 @@ interface getNativeBalanceRequest extends NextApiRequest {
 export default async function handler(req: getNativeBalanceRequest, res: NextApiResponse) {
   await cors(req, res);
   const { address, chain, toBlock } = req.body;
-  await Moralis.start({ apiKey: process.env.MORALIS_API });
   try {
     const data = await Moralis.EvmApi.balance.getNativeBalance({
       address,

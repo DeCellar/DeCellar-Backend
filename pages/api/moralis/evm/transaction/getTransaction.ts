@@ -10,8 +10,6 @@ export default async function handler(req: getTransactionRequest, res: NextApiRe
   await cors(req, res);
   const { chain, transactionHash } = req.body;
 
-  await Moralis.start({ apiKey: process.env.MORALIS_API });
-
   try {
     const data = await Moralis.EvmApi.transaction.getTransaction({
       chain,

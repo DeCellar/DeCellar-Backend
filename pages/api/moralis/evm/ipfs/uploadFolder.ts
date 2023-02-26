@@ -9,7 +9,6 @@ interface uploadFolderRequest extends NextApiRequest {
 export default async function handler(req: uploadFolderRequest, res: NextApiResponse) {
   await cors(req, res);
   const { abi } = req.body;
-  await Moralis.start({ apiKey: process.env.MORALIS_API });
 
   try {
     const data = await Moralis.EvmApi.ipfs.uploadFolder({

@@ -10,7 +10,6 @@ export default async function handler(req: getContractEventsRequest, res: NextAp
   await cors(req, res);
   const { abi, address, chain, fromBlock, fromDate, limit, offset, toBlock, toDate, topic } =
     req.body;
-  await Moralis.start({ apiKey: process.env.MORALIS_API });
 
   try {
     const data = await Moralis.EvmApi.events.getContractEvents({

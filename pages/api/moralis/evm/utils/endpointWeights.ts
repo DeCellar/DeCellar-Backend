@@ -10,8 +10,6 @@ export default async function handler(req: endpointWeightsRequest, res: NextApiR
   await cors(req, res);
   const {} = req.body;
 
-  await Moralis.start({ apiKey: process.env.MORALIS_API });
-
   try {
     const data = await Moralis.EvmApi.utils.endpointWeights();
     res.status(200).json(data);

@@ -10,8 +10,6 @@ export default async function handler(req: getWalletTokenTransfersRequest, res: 
   await cors(req, res);
   const { address, chain, cursor, fromBlock, fromDate, limit, toBlock, toDate } = req.body;
 
-  await Moralis.start({ apiKey: process.env.MORALIS_API });
-
   try {
     const data = await Moralis.EvmApi.token.getWalletTokenTransfers({
       address,

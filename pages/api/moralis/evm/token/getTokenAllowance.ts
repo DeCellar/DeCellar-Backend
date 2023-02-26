@@ -10,8 +10,6 @@ export default async function handler(req: getTokenAllowanceRequest, res: NextAp
   await cors(req, res);
   const { address, chain, ownerAddress, spenderAddress } = req.body;
 
-  await Moralis.start({ apiKey: process.env.MORALIS_API });
-
   try {
     const data = await Moralis.EvmApi.token.getTokenAllowance({
       address,

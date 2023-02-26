@@ -9,7 +9,6 @@ interface getBlockParamsRequest extends NextApiRequest {
 export default async function handler(req: getBlockParamsRequest, res: NextApiResponse) {
   await cors(req, res);
   const { blockNumberOrHash, chain } = req.body;
-  await Moralis.start({ apiKey: process.env.MORALIS_API });
 
   try {
     const data = await Moralis.EvmApi.block.getBlock({
