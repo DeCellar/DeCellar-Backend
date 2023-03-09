@@ -1,11 +1,24 @@
+import Head from 'next/head';
+import Moralis from 'moralis';
 import { HOST_API, DOMAIN } from '../config';
 
 export default function IndexPage() {
+  Moralis.start({
+    apiKey: process.env.MORALIS_API_KEY,
+  });
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Welcome to the NFTPub API</h1>
+      <Head>
+        <title>DeCellar API</title>
+        <meta name="description" content="DeCellar API for marketplace" />
+        <meta name="keywords" content="wine, API, DeCellar, selling" />
+        <meta name="author" content="DeCellar" />
+        <link rel="icon" href="assets/images/logos/logo.jpeg" />
+      </Head>
+      <img src="assets/images/logos/logo.jpeg" style={styles.logo} alt="DeCellar Logo" />
+      <h1 style={styles.title}>Welcome to the DeCellar API</h1>
       <p style={styles.text}>
-        You have successfully set up the NFTPub API. You can start building your backend
+        You have successfully set up the DeCellar API. You can start building your backend
         functionality by creating new API routes in the <code>pages/api</code> directory.
       </p>
       <p style={styles.text}>
@@ -25,6 +38,11 @@ const styles = {
     height: '100vh',
     background: '#ffffff',
     fontFamily: 'Roboto, sans-serif',
+  } as React.CSSProperties,
+  logo: {
+    width: '200px',
+    height: 'auto',
+    margin: '20px 0',
   } as React.CSSProperties,
   title: {
     fontSize: '48px',

@@ -16,8 +16,9 @@ const nextConfig = {
     FIREBASE_CLIENT_EMAIL: process.env.FIREBASE_CLIENT_EMAIL,
     FIREBASE_PRIVATE_KEY: process.env.FIREBASE_PRIVATE_KEY,
     FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
+    //MORALIS
     MORALIS_API: process.env.MORALIS_API,
-    POLYGON_API: process.env.POLYGON_API,
+    MORALIS_API_KEY: process.env.MORALIS_API_KEY,
     // BLOCKCHAIN
     NETWORK: process.env.NETWORK,
     // NFT
