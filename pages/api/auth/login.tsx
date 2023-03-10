@@ -7,7 +7,6 @@ import { DOMAIN } from '../../../config';
 export default async function login(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
   res.setHeader('Access-Control-Allow-Credentials', 'true');
-
   // Grab the login payload the user sent us with their request.
   const payload = req.body.payload;
 
