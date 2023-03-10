@@ -8,7 +8,7 @@ const cors = initMiddleware(
   Cors({
     // Only allow requests with GET, POST and OPTIONS
     methods: ['GET', 'POST', 'OPTIONS'],
-    origin: DOMAIN,
+    origin: DOMAIN as string,
   })
 );
 
