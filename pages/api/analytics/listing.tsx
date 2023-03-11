@@ -8,6 +8,7 @@ const { MARKETPLACE, NETWORK } = process.env;
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await cors(req, res);
+
     if (!NETWORK || !MARKETPLACE) {
       throw new Error('Missing required environment variables');
     }
@@ -15,17 +16,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const sdk = new ThirdwebSDK(NETWORK);
     const contract = await sdk.getContract(MARKETPLACE, 'marketplace');
     const listedNFT = await contract.getAllListings();
-
+    const activeListing = await contract.getActiveListings();
     const { address } = req.query;
 
-    const listings: any = [];
-    listedNFT.forEach((listing: any) => {
-      if (listing.sellerAddress.includes(address)) {
-        return listings.push(listing);
-      }
-    });
+    const active = activeListing.filter((listing: any) => listing.sellerAddress.includes(address));
+    const listings = listedNFT.filter((listing: any) => listing.sellerAddress.includes(address));
 
-    // Calculate the start and end dates of this week and last week
     const today = new Date();
     const thisWeekStart = new Date(
       today.getFullYear(),
@@ -35,66 +31,49 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const lastWeekStart = new Date(thisWeekStart.getTime() - 7 * 24 * 60 * 60 * 1000);
     const lastWeekEnd = new Date(thisWeekStart.getTime() - 1 * 24 * 60 * 60 * 1000);
 
-    // Filter the listings based on the dates
-    const presentWeekListings = await listings.filter((listing: any) => {
-      const listingDate = new Date(
-        parseInt(
-          listing.type == 1
-            ? listing.startTimeInEpochSeconds._hex
-            : listing.startTimeInSeconds._hex,
-          16
-        ) * 1000
-      );
+    const filterListingsByDates = (listings: any[], startDate: Date, endDate?: Date) =>
+      listings.filter((listing: any) => {
+        const listingDate = new Date(
+          parseInt(
+            listing.type == 1
+              ? listing.startTimeInEpochSeconds?._hex
+              : listing.startTimeInSeconds._hex,
+            16
+          ) * 1000
+        );
 
-      return listingDate >= thisWeekStart;
-    });
+        return listingDate >= startDate && (!endDate || listingDate <= endDate);
+      });
 
-    const lastWeekListings = await listings.filter((listing: any) => {
-      const listingDate = new Date(
-        parseInt(
-          listing.type == 1
-            ? listing.startTimeInEpochSeconds._hex
-            : listing.startTimeInSeconds._hex,
-          16
-        ) * 1000
-      );
+    const presentWeekListings = filterListingsByDates(listings, thisWeekStart);
+    const lastWeekListings = filterListingsByDates(listings, lastWeekStart, lastWeekEnd);
 
-      return listingDate >= lastWeekStart && listingDate <= lastWeekEnd;
-    });
+    const countListingsByDay = (listings: any[]) => {
+      const listingCountsArray = [0, 0, 0, 0, 0, 0, 0];
 
-    // Count the number of listings for each day in this week and last week
-    const presentWeekListingCountsArray = [0, 0, 0, 0, 0, 0, 0];
-    const lastWeekListingCountsArray = [0, 0, 0, 0, 0, 0, 0];
+      listings.forEach((listing: any) => {
+        const dayIndex = new Date(
+          parseInt(
+            listing.type == 1
+              ? listing.startTimeInEpochSeconds?._hex
+              : listing.startTimeInSeconds._hex,
+            16
+          ) * 1000
+        ).getDay();
 
-    presentWeekListings.forEach((listing: any) => {
-      const dayIndex = new Date(
-        parseInt(
-          listing.type == 1
-            ? listing.startTimeInEpochSeconds?._hex
-            : listing.startTimeInSeconds._hex,
-          16
-        ) * 1000
-      ).getDay();
-      presentWeekListingCountsArray[dayIndex]++;
-    });
+        listingCountsArray[dayIndex]++;
+      });
 
-    lastWeekListings.forEach((listing: any) => {
-      const dayIndex = new Date(
-        parseInt(
-          listing.type == 1
-            ? listing.startTimeInEpochSeconds?._hex
-            : listing.startTimeInSeconds._hex,
-          16
-        ) * 1000
-      ).getDay();
-      lastWeekListingCountsArray[dayIndex]++;
-    });
+      return listingCountsArray;
+    };
+
+    const presentWeekListingCountsArray = countListingsByDay(presentWeekListings);
+    const lastWeekListingCountsArray = countListingsByDay(lastWeekListings);
 
     const sumPresentWeek = fSumArray(presentWeekListingCountsArray);
     const sumLastWeek = fSumArray(lastWeekListingCountsArray);
     const growth = fPercentChange(sumLastWeek, sumPresentWeek);
 
-    // Construct the response object
     const response = {
       presentWeek: {
         listings: presentWeekListingCountsArray,
@@ -105,10 +84,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         count: sumLastWeek,
       },
       growthPercent: growth,
-      totalListing: {
-        count: listings.length,
+      total: {
+        all: listings.length,
+        active: active.length,
       },
     };
+
     res.status(200).json(response);
   } catch (error) {
     console.error(error);

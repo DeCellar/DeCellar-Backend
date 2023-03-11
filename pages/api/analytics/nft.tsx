@@ -7,39 +7,36 @@ const { NETWORK, NFT_COLLECTION, PRIVATE_KEY } = process.env;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
+
   try {
     if (!NETWORK || !NFT_COLLECTION) {
-      return res.status(500).send('Missing required environment variables');
+      return res.status(500).json({ error: 'Missing required environment variables' });
     }
+
     const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, NETWORK);
     const contract = await sdk.getContract(NFT_COLLECTION, 'nft-collection');
     const { address } = req.query;
-    const nfts: any = await contract.getOwned(address as string);
+    const nfts: any[] = await contract.getOwned(address as string);
 
-    // Calculate the start and end dates of this week and last week
+    // Get NFTs for this week and last week
     const today = new Date();
     const thisWeekStart = new Date(
       today.getFullYear(),
       today.getMonth(),
       today.getDate() - today.getDay()
     );
-
     const lastWeekStart = new Date(thisWeekStart.getTime() - 7 * 24 * 60 * 60 * 1000);
     const lastWeekEnd = new Date(thisWeekStart.getTime() - 1 * 24 * 60 * 60 * 1000);
-    // Filter nfts based on the dates
-    const presentWeekNFTs = [];
-    const lastWeekNFTs = [];
-
-    for (const nft of nfts) {
+    const presentWeekNFTs = nfts.filter((nft) => {
       const nftDate = new Date(nft?.metadata?.createdAt);
-      if (nftDate >= thisWeekStart) {
-        presentWeekNFTs.push(nft);
-      }
-      if (nftDate >= lastWeekStart && nftDate <= lastWeekEnd) {
-        lastWeekNFTs.push(nft);
-      }
-    }
-    // Count the number of nfts for each day in this week and last week
+      return nftDate >= thisWeekStart;
+    });
+    const lastWeekNFTs = nfts.filter((nft) => {
+      const nftDate = new Date(nft?.metadata?.createdAt);
+      return nftDate >= lastWeekStart && nftDate <= lastWeekEnd;
+    });
+
+    // Count the number of NFTs for each day in this week and last week
     const presentWeekNftCountsArray = Array(7).fill(0);
     const lastWeekNftCountsArray = Array(7).fill(0);
 
@@ -53,6 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       lastWeekNftCountsArray[dayIndex]++;
     }
 
+    // Calculate the growth percentage
     const sumPresentWeek = fSumArray(presentWeekNftCountsArray);
     const sumLastWeek = fSumArray(lastWeekNftCountsArray);
     const growth = fPercentChange(sumLastWeek, sumPresentWeek);
@@ -72,6 +70,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         count: nfts.length,
       },
     };
+
     res.status(200).json(response);
   } catch (error) {
     console.error(error);
