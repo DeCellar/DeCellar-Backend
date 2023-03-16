@@ -2,9 +2,14 @@ import Moralis from 'moralis';
 import { NextApiRequest, NextApiResponse } from 'next';
 import type { getPairReservesParams } from 'src/@types/evm';
 import cors from 'src/utils/cors';
+
 interface getPairReservesRequest extends NextApiRequest {
   body: getPairReservesParams;
 }
+
+Moralis.start({
+  apiKey: process.env.MORALIS_API_KEY,
+});
 
 export default async function handler(req: getPairReservesRequest, res: NextApiResponse) {
   await cors(req, res);

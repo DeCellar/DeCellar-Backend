@@ -5,15 +5,17 @@ import cors from 'src/utils/cors';
 interface getNativeBalanceRequest extends NextApiRequest {
   body: getNativeBalanceParams;
 }
+Moralis.start({
+  apiKey: process.env.MORALIS_API_KEY,
+});
 
 export default async function handler(req: getNativeBalanceRequest, res: NextApiResponse) {
   await cors(req, res);
-  const { address, chain, toBlock } = req.body;
+  const { address, chain } = req.body;
   try {
     const data = await Moralis.EvmApi.balance.getNativeBalance({
       address,
       chain,
-      toBlock,
     });
     res.status(200).json(data);
   } catch (error) {

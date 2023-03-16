@@ -2,9 +2,15 @@ import Moralis from 'moralis';
 import { NextApiRequest, NextApiResponse } from 'next';
 import type { getContractLogsParams } from 'src/@types/evm';
 import cors from 'src/utils/cors';
+
 interface getContractLogsRequest extends NextApiRequest {
   body: getContractLogsParams;
 }
+
+Moralis.start({
+  apiKey: process.env.MORALIS_API_KEY,
+});
+
 
 export default async function handler(req: getContractLogsRequest, res: NextApiResponse) {
   await cors(req, res);

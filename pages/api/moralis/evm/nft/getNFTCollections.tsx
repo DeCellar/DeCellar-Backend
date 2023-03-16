@@ -2,6 +2,10 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import Moralis from 'moralis';
 import cors from 'src/utils/cors';
 
+Moralis.start({
+  apiKey: process.env.MORALIS_API_KEY,
+});
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
   try {

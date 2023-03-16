@@ -2,15 +2,20 @@ import Moralis from 'moralis';
 import { NextApiRequest, NextApiResponse } from 'next';
 import type { getWalletTransactionsParams } from 'src/@types/evm';
 import cors from 'src/utils/cors';
+
 interface getWalletTransactionsRequest extends NextApiRequest {
   body: getWalletTransactionsParams;
 }
+
+Moralis.start({
+  apiKey: process.env.MORALIS_API_KEY,
+});
 
 export default async function handler(req: getWalletTransactionsRequest, res: NextApiResponse) {
   await cors(req, res);
   const { address, chain, cursor, fromBlock, fromDate, limit, toBlock, toDate } = req.body;
   try {
-    const data = await Moralis.EvmApi.transaction.getWalletTransactions({
+    const transaction = await Moralis.EvmApi.transaction.getWalletTransactions({
       address,
       chain,
       cursor,
@@ -20,7 +25,7 @@ export default async function handler(req: getWalletTransactionsRequest, res: Ne
       toBlock,
       toDate,
     });
-    res.status(200).json(data);
+    res.status(200).json(transaction);
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message);

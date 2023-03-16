@@ -3,9 +3,6 @@ import Moralis from 'moralis';
 import { HOST_API, DOMAIN } from '../config';
 
 export default function IndexPage() {
-  Moralis.start({
-    apiKey: process.env.MORALIS_API_KEY,
-  });
   return (
     <div style={styles.container}>
       <Head>

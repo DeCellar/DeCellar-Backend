@@ -2,10 +2,11 @@ import { paramCase } from 'change-case';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 import cors from 'src/utils/cors';
+import { NFT } from 'src/types/nft';
 
 const { NFT_COLLECTION, NETWORK } = process.env;
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NFT, res: NextApiResponse) {
   await cors(req, res);
   try {
     if (!NETWORK || !NFT_COLLECTION) {

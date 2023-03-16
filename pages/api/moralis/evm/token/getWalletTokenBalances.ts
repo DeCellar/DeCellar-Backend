@@ -6,6 +6,10 @@ interface getWalletTokenBalancesRequest extends NextApiRequest {
   body: getWalletTokenBalancesParams;
 }
 
+Moralis.start({
+  apiKey: process.env.MORALIS_API_KEY,
+});
+
 export default async function handler(req: getWalletTokenBalancesRequest, res: NextApiResponse) {
   await cors(req, res);
   const { address, chain } = req.body;
