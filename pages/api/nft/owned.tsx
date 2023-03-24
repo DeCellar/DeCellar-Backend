@@ -1,11 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import cors from 'src/utils/cors';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
-import { NFT } from 'src/types/nft';
 
-const { NETWORK, NFT_COLLECTION, PRIVATE_KEY } = process.env;
+const { NETWORK } = process.env;
 
-export default async function handler(req: NFT, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
   try {
     if (!NETWORK) {

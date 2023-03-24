@@ -1,65 +1,174 @@
-import Moralis from 'moralis';
 import { NextApiRequest, NextApiResponse } from 'next';
+import process from 'process';
 import cors from 'src/utils/cors';
-import type { getWalletTransactionsParams } from 'src/@types/evm';
-Moralis.start({
-  apiKey: process.env.MORALIS_API_KEY,
-});
+import axios from 'src/utils/axios';
+import { fPercentChange } from 'src/utils/math';
+import { ThirdwebSDK } from '@thirdweb-dev/sdk';
+
+const { NETWORK } = process.env;
+interface NftCollectionItem {
+  address: string;
+  chainId: number;
+  transactions: {
+    total: number | null;
+    page: number;
+    page_size: number;
+    cursor: any;
+    result: {
+      block_number: string;
+      block_timestamp: string;
+      block_hash: string;
+      transaction_hash: string;
+      transaction_index: number;
+      log_index: number;
+      value: string;
+      contract_type: string;
+      transaction_type: string;
+      token_address: string;
+      token_id: string;
+      from_address: string;
+      to_address: string;
+      amount: string;
+      verified: number;
+      operator: any;
+    }[];
+    block_exists: boolean;
+  };
+}
+
+interface NftApiResponse {
+  nftSold: number;
+  nftCollection: NftCollectionItem[];
+}
+
+interface MonthlySales {
+  month: string;
+  sales: number;
+  revenue: number;
+}
+
+interface YearlySales {
+  year: number;
+  salesByMonth: MonthlySales[];
+}
+
+const headers: any = { accept: 'application/json', 'X-API-Key': process.env.MORALIS_API_KEY };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await cors(req, res);
-    const { address, chain, cursor, fromDate, limit, toDate } = req.body;
-    const transactions: getWalletTransactionsParams = await Moralis.EvmApi.transaction.getWalletTransactions({
-      address,
-      chain,
-      cursor,
-      fromDate,
-      limit,
-      toDate,
+    if (!NETWORK) {
+      return res.status(500).send('Missing required environment variables');
+    }
+    const { address, chain } = req.query;
+
+    const sdk = new ThirdwebSDK(NETWORK);
+    const contractList = await sdk.getContractList(address as string);
+    const nftCollectionPromises = contractList.map(async (contract) => {
+      const contractType = await contract.contractType();
+      if (contractType === 'nft-collection') {
+        const response = await axios.get(
+          `https://deep-index.moralis.io/api/v2/nft/${contract.address}/transfers`,
+          {
+            headers,
+            params: {
+              chain,
+            },
+          }
+        );
+        return {
+          ...contract,
+          transactions: response.data,
+        };
+      }
+      return null;
     });
 
-    const now = new Date();
-    const thisMonth = now.getMonth() + 1;
-    const lastMonth = thisMonth === 1 ? 12 : thisMonth - 1;
+    const nftCollection = (await Promise.all(nftCollectionPromises)).filter(
+      (item) => item !== null
+    ) as NftCollectionItem[];
 
-    const [yearSales, yearExpenses] = Array.from({ length: 2 }, () => Array(12).fill(0));
-    let [thisMonthSales, lastMonthSales, thisMonthExpenses, lastMonthExpenses] = Array(4).fill(0);
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
+    const lastYear = currentYear - 1;
 
-    transactions.forEach(
-      (block_timestamp: string, value: number, from_address: string, to_address: string) => {
-        const txDate = new Date(block_timestamp);
-        const txMonth = txDate.getMonth();
+    const monthNames = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
 
-        if (from_address.toLowerCase() === address.toLowerCase()) {
-          yearSales[txMonth] += Number(value);
-          if (txMonth === thisMonth - 1) {
-            thisMonthSales += Number(value);
-          } else if (txMonth === lastMonth - 1) {
-            lastMonthSales += Number(value);
-          }
+    const salesByMonth: MonthlySales[] = Array.from({ length: 12 }, (_, i) => ({
+      month: monthNames[i],
+      sales: 0,
+      revenue: 0,
+    }));
+
+    nftCollection.forEach((collection) => {
+      collection.transactions.result.forEach((transaction) => {
+        const transactionDate = new Date(transaction.block_timestamp);
+        const transactionYear = transactionDate.getFullYear();
+        const transactionMonth = transactionDate.getMonth() + 1;
+
+        if (transactionYear === currentYear) {
+          salesByMonth[transactionMonth - 1].sales += 1;
+          salesByMonth[transactionMonth - 1].revenue += parseInt(transaction.value);
         }
-        if (to_address.toLowerCase() === address.toLowerCase()) {
-          yearExpenses[txMonth] += Number(value);
-          if (txMonth === thisMonth - 1) {
-            thisMonthExpenses += Number(value);
-          } else if (txMonth === lastMonth - 1) {
-            lastMonthExpenses += Number(value);
-          }
-        }
-      }
-    );
+      });
+    });
 
-    const response = {
-      yearSales,
-      yearExpenses,
-      thisMonthSales,
-      lastMonthSales,
-      thisMonthExpenses,
-      lastMonthExpenses,
+    const salesByMonthLastYear: MonthlySales[] = Array.from({ length: 12 }, (_, i) => ({
+      month: monthNames[i],
+      sales: 0,
+      revenue: 0,
+    }));
+
+    nftCollection.forEach((collection) => {
+      collection.transactions.result.forEach((transaction) => {
+        const transactionDate = new Date(transaction.block_timestamp);
+        const transactionYear = transactionDate.getFullYear();
+        const transactionMonth = transactionDate.getMonth() + 1;
+
+        if (transactionYear === lastYear) {
+          salesByMonthLastYear[transactionMonth - 1].sales += 1;
+          salesByMonth[transactionMonth - 1].revenue += parseInt(transaction.value);
+        }
+      });
+    });
+
+    const totalSales = salesByMonth.reduce((acc, cur) => acc + cur.sales, 0);
+    const totalSalesLastYear = salesByMonthLastYear.reduce((acc, cur) => acc + cur.sales, 0);
+
+    const yearlySales: YearlySales[] = [
+      {
+        year: lastYear,
+        salesByMonth: salesByMonthLastYear,
+      },
+      {
+        year: currentYear,
+        salesByMonth,
+      },
+    ];
+
+    const nftApiResponse = {
+      nftSold: totalSales,
+      totalSales: totalSales,
+      totalSalesLastYear: totalSalesLastYear,
+      yearlySales: yearlySales,
+      nftCollection: nftCollection,
     };
 
-    res.status(200).json(response);
+    return res.status(200).json(nftApiResponse);
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: 'An error occurred while fetching wallet transactions.' });
