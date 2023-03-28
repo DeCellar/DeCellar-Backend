@@ -1,20 +1,26 @@
-import Moralis from 'moralis';
 import { NextApiRequest, NextApiResponse } from 'next';
-import type { getNativeBalanceParams } from 'src/@types/evm';
+import axios from 'src/utils/axios';
 import cors from 'src/utils/cors';
-interface getNativeBalanceRequest extends NextApiRequest {
-  body: getNativeBalanceParams;
-}
 
-export default async function handler(req: getNativeBalanceRequest, res: NextApiResponse) {
+const headers: any = {
+  accept: 'application/json',
+  'X-API-Key': process.env.MORALIS_API_KEY,
+};
+console.log(process.env.MORALIS_API_KEY);
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
-  const { address, chain, toBlock } = req.body;
+  const { address, chain } = req.query;
+
   try {
-    const data = await Moralis.EvmApi.balance.getNativeBalance({
-      address,
-      chain,
-      toBlock,
+    const response = await axios.get(`https://deep-index.moralis.io/api/v2/${address}/balance`, {
+      headers,
+      params: {
+        chain,
+      },
     });
+
+    const data = response.data;
     res.status(200).json(data);
   } catch (error) {
     if (error instanceof Error) {

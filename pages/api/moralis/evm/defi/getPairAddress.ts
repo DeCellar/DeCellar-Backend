@@ -1,24 +1,27 @@
-import Moralis from 'moralis';
+import axios from 'src/utils/axios';
 import { NextApiRequest, NextApiResponse } from 'next';
-import type { getPairAddressParams } from 'src/@types/evm';
 import cors from 'src/utils/cors';
-interface getPairAddressRequest extends NextApiRequest {
-  body: getPairAddressParams;
-}
 
-export default async function handler(req: getPairAddressRequest, res: NextApiResponse) {
+const headers: any = {
+  accept: 'application/json',
+  'X-API-Key': process.env.MORALIS_API_KEY,
+};
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
-  const { chain, exchange, toBlock, toDate, token0Address, token1Address } = req.body;
+  const { token0Address, token1Address, chain, exchange } = req.query;
+
+  if (!token0Address || !token1Address || !chain || !exchange) {
+    return res.status(400).json({ error: 'Missing required parameters' });
+  }
+  const url = `https://deep-index.moralis.io/api/v2/${token0Address}/${token1Address}/pairAddress?chain=${chain}&exchange=${exchange}`;
 
   try {
-    const data = await Moralis.EvmApi.defi.getPairAddress({
-      chain,
-      exchange,
-      toBlock,
-      toDate,
-      token0Address,
-      token1Address,
+    const response = await axios.get(url, {
+      headers,
     });
+    const data = response.data;
+
     res.status(200).json(data);
   } catch (error) {
     if (error instanceof Error) {

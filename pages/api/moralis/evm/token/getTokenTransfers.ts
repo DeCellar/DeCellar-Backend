@@ -1,26 +1,33 @@
-import Moralis from 'moralis';
+import axios from 'src/utils/axios';
 import { NextApiRequest, NextApiResponse } from 'next';
-import type { getTokenTransfersParams } from 'src/@types/evm';
 import cors from 'src/utils/cors';
-interface getTokenTransfersRequest extends NextApiRequest {
-  body: getTokenTransfersParams;
-}
 
-export default async function handler(req: getTokenTransfersRequest, res: NextApiResponse) {
+const headers: any = {
+  accept: 'application/json',
+  'X-API-Key': process.env.MORALIS_API_KEY,
+};
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
-  const { address, chain, cursor, fromBlock, fromDate, limit, toBlock, toDate } = req.body;
+  const { address, chain, cursor, fromBlock, fromDate, limit, toBlock, toDate } = req.query;
 
-  try {
-    const data = await Moralis.EvmApi.token.getTokenTransfers({
-      address,
-      chain,
-      cursor,
-      fromBlock,
-      fromDate,
-      limit,
-      toBlock,
-      toDate,
+   try {
+    const response = await axios.get(`https://deep-index.moralis.io/api/v2/erc20/${address}/transfers`, 
+    // https://deep-index.moralis.io/api/v2/erc20/0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0/transfers?chain=eth' 
+    {
+      headers,
+      params: {
+        chain,
+        cursor,
+        fromBlock,
+        fromDate,
+        limit,
+        toBlock,
+        toDate
+      }
     });
+    
+    const data = response.data;
     res.status(200).json(data);
   } catch (error) {
     if (error instanceof Error) {
@@ -29,3 +36,4 @@ export default async function handler(req: getTokenTransfersRequest, res: NextAp
     }
   }
 }
+

@@ -1,20 +1,27 @@
-import Moralis from 'moralis';
+import axios from 'src/utils/axios';
 import { NextApiRequest, NextApiResponse } from 'next';
-import type { getBlockParams } from 'src/@types/evm';
 import cors from 'src/utils/cors';
-interface getBlockParamsRequest extends NextApiRequest {
-  body: getBlockParams;
-}
 
-export default async function handler(req: getBlockParamsRequest, res: NextApiResponse) {
+const headers: any = {
+  accept: 'application/json',
+  'X-API-Key': process.env.MORALIS_API_KEY,
+};
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
-  const { blockNumberOrHash, chain } = req.body;
-
+  const { blockNumberOrHash, chain } = req.query;
+ 
   try {
-    const data = await Moralis.EvmApi.block.getBlock({
-      blockNumberOrHash,
-      chain,
+    const response = await axios.get(`https://deep-index.moralis.io/api/v2/block/${blockNumberOrHash}`, 
+    //https://deep-index.moralis.io/api/v2/block/15863321?chain=eth
+    {
+      headers,
+      params: {
+        chain,
+      }
     });
+    
+    const data = response.data;
     res.status(200).json(data);
   } catch (error) {
     if (error instanceof Error) {
@@ -23,3 +30,4 @@ export default async function handler(req: getBlockParamsRequest, res: NextApiRe
     }
   }
 }
+
