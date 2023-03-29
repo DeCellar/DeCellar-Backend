@@ -1,32 +1,35 @@
-import Moralis from 'moralis';
 import { NextApiRequest, NextApiResponse } from 'next';
-import type { getWalletTokenTransfersParams } from 'src/@types/evm';
+import axios from 'src/utils/axios';
 import cors from 'src/utils/cors';
 
-interface getWalletTokenTransfersRequest extends NextApiRequest {
-  body: getWalletTokenTransfersParams;
-}
+const headers: any = {
+  accept: 'application/json',
+  'X-API-Key': process.env.MORALIS_API_KEY,
+};
 
-Moralis.start({
-  apiKey: process.env.MORALIS_API_KEY,
-});
-
-
-export default async function handler(req: getWalletTokenTransfersRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
-  const { address, chain, cursor, fromBlock, fromDate, limit, toBlock, toDate } = req.body;
+  const { address, chain, cursor, fromBlock, fromDate, limit, toBlock, toDate } = req.query;
 
   try {
-    const data = await Moralis.EvmApi.token.getWalletTokenTransfers({
-      address,
-      chain,
-      cursor,
-      fromBlock,
-      fromDate,
-      limit,
-      toBlock,
-      toDate,
-    });
+    const response = await axios.get(
+      `https://deep-index.moralis.io/api/v2/${address}/erc20/transfers`,
+
+      {
+        headers,
+        params: {
+          chain,
+          cursor,
+          fromBlock,
+          fromDate,
+          limit,
+          toBlock,
+          toDate,
+        },
+      }
+    );
+
+    const data = response.data;
     res.status(200).json(data);
   } catch (error) {
     if (error instanceof Error) {

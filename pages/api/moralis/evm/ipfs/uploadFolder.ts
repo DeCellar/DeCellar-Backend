@@ -1,25 +1,31 @@
-import Moralis from 'moralis';
 import { NextApiRequest, NextApiResponse } from 'next';
-import type { uploadFolderParams } from 'src/@types/evm';
+import axios from 'src/utils/axios';
 import cors from 'src/utils/cors';
 
-interface uploadFolderRequest extends NextApiRequest {
-  body: uploadFolderParams;
+const headers: any = {
+  accept: 'application/json',
+  'X-API-Key': process.env.MORALIS_API_KEY,
+};
+interface IPFSUploadRequestBody {
+  path: string;
+  content: string;
 }
 
-Moralis.start({
-  apiKey: process.env.MORALIS_API_KEY,
-});
-
-export default async function handler(req: uploadFolderRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
-  const { abi } = req.body;
+
+  const data: IPFSUploadRequestBody[] = req.body;
 
   try {
-    const data = await Moralis.EvmApi.ipfs.uploadFolder({
-      abi,
-    });
-    res.status(200).json(data);
+    const response: any = await axios.post(
+      'https://deep-index.moralis.io/api/v2/ipfs/uploadFolder',
+      data,
+      {
+        headers,
+      }
+    );
+
+    res.status(200).json(response.data);
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message);

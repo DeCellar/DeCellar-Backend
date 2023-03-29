@@ -1,21 +1,27 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import Moralis from 'moralis';
+import axios from 'src/utils/axios';
 import cors from 'src/utils/cors';
 
-Moralis.start({
-  apiKey: process.env.MORALIS_API_KEY,
-});
+const headers: any = {
+  accept: 'application/json',
+  'X-API-Key': process.env.MORALIS_API_KEY,
+};
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
+  const { address, chain } = req.query;
   try {
-    const { address, chain } = req.query;
-    const response = await Moralis.EvmApi.nft.getWalletNFTCollections({
-      address: address as string,
-      chain: chain as string,
-    });
-
-    res.status(200).json(response);
+    const response = await axios.get(
+      `https://deep-index.moralis.io/api/v2/${address}/nft/collections`,
+      {
+        headers,
+        params: {
+          chain,
+        },
+      }
+    );
+    const data = response.data;
+    res.status(200).json(data);
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message);

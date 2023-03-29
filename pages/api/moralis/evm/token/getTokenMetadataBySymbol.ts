@@ -1,26 +1,29 @@
-import Moralis from 'moralis';
 import { NextApiRequest, NextApiResponse } from 'next';
-import type { getTokenMetadataBySymbolParams } from 'src/@types/evm';
+import axios from 'src/utils/axios';
 import cors from 'src/utils/cors';
 
-interface getTokenMetadataBySymbolRequest extends NextApiRequest {
-  body: getTokenMetadataBySymbolParams;
-}
+const headers: any = {
+  accept: 'application/json',
+  'X-API-Key': process.env.MORALIS_API_KEY,
+};
 
-Moralis.start({
-  apiKey: process.env.MORALIS_API_KEY,
-});
-
-
-export default async function handler(req: getTokenMetadataBySymbolRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
-  const { chain, symbols } = req.body;
+  const { chain, symbols } = req.query;
 
   try {
-    const data = await Moralis.EvmApi.token.getTokenMetadataBySymbol({
-      chain,
-      symbols,
-    });
+    const response = await axios.get(
+      `https://deep-index.moralis.io/api/v2/erc20/metadata/symbols`,
+      {
+        headers,
+        params: {
+          chain,
+          symbols,
+        },
+      }
+    );
+
+    const data = response.data;
     res.status(200).json(data);
   } catch (error) {
     if (error instanceof Error) {

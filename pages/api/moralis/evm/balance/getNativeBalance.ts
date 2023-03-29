@@ -11,6 +11,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   await cors(req, res);
   const { address, chain } = req.query;
 
+  if (!address || !chain) {
+    return res.status(400).json({ error: 'Missing required parameters' });
+  }
+
   try {
     const response = await axios.get(`https://deep-index.moralis.io/api/v2/${address}/balance`, {
       headers,

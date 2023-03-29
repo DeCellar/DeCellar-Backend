@@ -9,24 +9,12 @@ const headers: any = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
-  const { address, chain, cursor, fromBlock, fromDate, limit, toBlock, toDate } = req.query;
+  const {} = req.query;
 
   try {
-    const response = await axios.get(
-      `https://deep-index.moralis.io/api/v2/erc20/${address}/transfers`,
-      {
-        headers,
-        params: {
-          chain,
-          cursor,
-          fromBlock,
-          fromDate,
-          limit,
-          toBlock,
-          toDate,
-        },
-      }
-    );
+    const response = await axios.get('https://deep-index.moralis.io/api/v2/web3/version', {
+      headers,
+    });
 
     const data = response.data;
     res.status(200).json(data);
