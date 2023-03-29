@@ -6,6 +6,7 @@ const { MARKETPLACE, NETWORK } = process.env;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
+
   try {
     if (!NETWORK || !MARKETPLACE) {
       return res.status(500).send('Missing required environment variables');

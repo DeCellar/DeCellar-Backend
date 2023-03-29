@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import cors from 'src/utils/cors';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
-import {IListing} from 'src/types/marketplace';
+import { IListing } from 'src/types/marketplace';
 
 const { MARKETPLACE, NETWORK } = process.env;
 
-export default async function handler(req: IListing, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
   try {
     if (!NETWORK || !MARKETPLACE) {
@@ -15,7 +15,7 @@ export default async function handler(req: IListing, res: NextApiResponse) {
     const contract = await sdk.getContract(MARKETPLACE, 'marketplace');
     const listings = await contract.getActiveListings();
     const { address } = req.query;
-    const nfts: any = [];
+    const nfts: IListing[] = [];
     listings.forEach((listing: any) => {
       if (listing.sellerAddress.includes(address)) {
         return nfts.push(listing);
