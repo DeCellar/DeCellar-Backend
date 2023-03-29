@@ -1,5 +1,5 @@
-import axios from 'src/utils/axios';
 import { NextApiRequest, NextApiResponse } from 'next';
+import axios from 'src/utils/axios';
 import cors from 'src/utils/cors';
 
 const headers: any = {
@@ -13,10 +13,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const response = await axios.get('https://deep-index.moralis.io/api/v2/web3/version', {
-      // 'https://deep-index.moralis.io/api/v2/web3/version'
       headers,
     });
-    
+
     const data = response.data;
     res.status(200).json(data);
   } catch (error) {
@@ -26,4 +25,3 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   }
 }
-

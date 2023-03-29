@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
+import axios from 'src/utils/axios';
 import cors from 'src/utils/cors';
 
 const headers: any = {
@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const response = await axios.get(`https://deep-index.moralis.io/api/v2/${address}/allowance`, {
-    headers,
+      headers,
       params: {
         chain,
         ownerAddress,
@@ -30,4 +30,3 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   }
 }
-

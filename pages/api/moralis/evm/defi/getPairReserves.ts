@@ -1,25 +1,19 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import type { getPairReservesParams } from 'src/@types/evm';
-import cors from 'src/utils/cors';
 import axios from 'src/utils/axios';
-
-interface getPairReservesRequest extends NextApiRequest {
-  body: getPairReservesParams;
-}
+import cors from 'src/utils/cors';
 
 const headers: any = {
   accept: 'application/json',
   'X-API-Key': process.env.MORALIS_API_KEY,
 };
 
-export default async function handler(req: getPairReservesRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
   const { pairAddress, chain } = req.query;
 
   if (!pairAddress || !chain) {
     return res.status(400).json({ error: 'Missing required parameters' });
   }
-
   const url = `https://deep-index.moralis.io/api/v2/${pairAddress}/reserves?chain=${chain}`;
 
   try {

@@ -1,5 +1,5 @@
-import axios from 'src/utils/axios';
 import { NextApiRequest, NextApiResponse } from 'next';
+import axios from 'src/utils/axios';
 import cors from 'src/utils/cors';
 
 const headers: any = {
@@ -12,17 +12,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { abi, address, chain, functionName, params } = req.query;
 
   try {
-    const response = await axios.get(`https://deep-index.moralis.io/api/v2/${address}/${functionName}`, 
-    //'https://deep-index.moralis.io/api/v2/:address/function?chain=eth' 
-    {
-      headers,
-      params: {
-        abi,
-        chain,
-        params,
+    const response = await axios.get(
+      `https://deep-index.moralis.io/api/v2/${address}/${functionName}`,
+
+      {
+        headers,
+        params: {
+          abi,
+          chain,
+          params,
+        },
       }
-    });
-    
+    );
+
     const data = response.data;
     res.status(200).json(data);
   } catch (error) {

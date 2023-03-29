@@ -1,10 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import cors from 'src/utils/cors';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
+import { IListing } from 'src/types/marketplace';
 
 const { MARKETPLACE, NETWORK } = process.env;
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: IListing, res: NextApiResponse) {
   await cors(req, res);
   try {
     if (!NETWORK || !MARKETPLACE) {

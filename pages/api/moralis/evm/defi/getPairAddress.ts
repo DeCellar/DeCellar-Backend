@@ -1,5 +1,5 @@
-import axios from 'src/utils/axios';
 import { NextApiRequest, NextApiResponse } from 'next';
+import axios from 'src/utils/axios';
 import cors from 'src/utils/cors';
 
 const headers: any = {
