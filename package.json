@@ -1,6 +1,6 @@
 {
-  "name": "nftub-api",
-  "description": "A backend API for the NFTPub",
+  "name": "decellar-api",
+  "description": "A backend API for the DeCellar",
   "version": "1.0.0",
   "private": true,
   "keywords": [
@@ -10,7 +10,8 @@
     "platform",
     "api",
     "backend",
-    "polygon"
+    "polygon",
+    "decellar"
   ],
   "scripts": {
     "dev": "next dev",
@@ -18,7 +19,6 @@
     "start": "next start"
   },
   "dependencies": {
-    "@moralisweb3/evm-utils": "^2.12.0",
     "@thirdweb-dev/auth": "^3.0.5-dev-6a3dbb0",
     "@thirdweb-dev/sdk": "^3.9.0",
     "axios": "^0.24.0",
@@ -28,7 +28,6 @@
     "ethers": "^5.7.2",
     "firebase-admin": "^11.0.1",
     "lodash": "^4.17.21",
-    "moralis": "^2.6.6",
     "next": "^12.0.4",
     "react": "^17.0.2",
     "react-dom": "17.0.2",

@@ -36,21 +36,25 @@ interface NftCollectionItem {
   };
 }
 
-interface NftApiResponse {
-  nftSold: number;
-  nftCollection: NftCollectionItem[];
-}
-
 interface MonthlySales {
   month: string;
   sales: number;
   revenue: number;
 }
-
-interface YearlySales {
-  year: number;
-  salesByMonth: MonthlySales[];
-}
+const monthNames = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
 
 const headers: any = { accept: 'application/json', 'X-API-Key': process.env.MORALIS_API_KEY };
 
@@ -90,42 +94,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth() + 1;
     const lastYear = currentYear - 1;
 
-    const monthNames = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-
-    const salesByMonth: MonthlySales[] = Array.from({ length: 12 }, (_, i) => ({
+    const salesByMonthCurrentYear: MonthlySales[] = Array.from({ length: 12 }, (_, i) => ({
       month: monthNames[i],
       sales: 0,
       revenue: 0,
     }));
-
-    nftCollection.forEach((collection) => {
-      collection.transactions.result.forEach((transaction) => {
-        const transactionDate = new Date(transaction.block_timestamp);
-        const transactionYear = transactionDate.getFullYear();
-        const transactionMonth = transactionDate.getMonth() + 1;
-
-        if (transactionYear === currentYear) {
-          salesByMonth[transactionMonth - 1].sales += 1;
-          salesByMonth[transactionMonth - 1].revenue += parseInt(transaction.value);
-        }
-      });
-    });
 
     const salesByMonthLastYear: MonthlySales[] = Array.from({ length: 12 }, (_, i) => ({
       month: monthNames[i],
@@ -139,33 +114,34 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const transactionYear = transactionDate.getFullYear();
         const transactionMonth = transactionDate.getMonth() + 1;
 
-        if (transactionYear === lastYear) {
+        if (transactionYear === currentYear) {
+          salesByMonthCurrentYear[transactionMonth - 1].sales += 1;
+          salesByMonthCurrentYear[transactionMonth - 1].revenue += parseInt(transaction.value);
+        } else if (transactionYear === lastYear) {
           salesByMonthLastYear[transactionMonth - 1].sales += 1;
-          salesByMonth[transactionMonth - 1].revenue += parseInt(transaction.value);
+          salesByMonthLastYear[transactionMonth - 1].revenue += parseInt(transaction.value);
         }
       });
     });
 
-    const totalSales = salesByMonth.reduce((acc, cur) => acc + cur.sales, 0);
-    const totalSalesLastYear = salesByMonthLastYear.reduce((acc, cur) => acc + cur.sales, 0);
-
-    const yearlySales: YearlySales[] = [
-      {
-        year: lastYear,
-        salesByMonth: salesByMonthLastYear,
-      },
-      {
-        year: currentYear,
-        salesByMonth,
-      },
-    ];
+    const nftSold = salesByMonthCurrentYear.reduce((acc, cur) => acc + cur.sales, 0);
+    const totalSales = salesByMonthCurrentYear.reduce((acc, cur) => acc + cur.sales, 0);
+    const salesLastYear = salesByMonthLastYear.map((s) => s.sales);
+    const revenueLastYear = salesByMonthLastYear.map((s) => s.revenue);
+    const salesCurrentYear = salesByMonthCurrentYear.map((s) => s.sales);
+    const revenueCurrentYear = salesByMonthCurrentYear.map((s) => s.revenue);
 
     const nftApiResponse = {
-      nftSold: totalSales,
+      nftSold: nftSold,
       totalSales: totalSales,
-      totalSalesLastYear: totalSalesLastYear,
-      yearlySales: yearlySales,
-      nftCollection: nftCollection,
+      lastYear: lastYear,
+      months: monthNames,
+      salesLastYear: salesLastYear,
+      revenueLastYear: revenueLastYear,
+      currentYear: currentYear,
+      salesCurrentYear: salesCurrentYear,
+      revenueCurrentYear: revenueCurrentYear,
+      nftCollections: nftCollection,
     };
 
     return res.status(200).json(nftApiResponse);
