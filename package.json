@@ -1,6 +1,6 @@
 {
-  "name": "nftub-api",
-  "description": "A backend API for the NFTPub",
+  "name": "decellar-api",
+  "description": "A backend API for the DeCellar",
   "version": "1.0.0",
   "private": true,
   "keywords": [
@@ -10,7 +10,8 @@
     "platform",
     "api",
     "backend",
-    "polygon"
+    "polygon",
+    "decellar"
   ],
   "scripts": {
     "dev": "next dev",

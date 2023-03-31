@@ -6,12 +6,12 @@ export default function IndexPage() {
     <div style={styles.container}>
       <Head>
         <title>DeCellar API</title>
-        <meta name="description" content="DeCellar API for marketplace" />
+        <meta name="description" content="DeCellar API for NFT marketplace" />
         <meta name="keywords" content="wine, API, DeCellar, selling" />
         <meta name="author" content="DeCellar" />
-        <link rel="icon" href="assets/images/logos/logo.jpeg" />
+        <link rel="icon" href="assets/images/logos/logo.png" />
       </Head>
-      <img src="assets/images/logos/logo.jpeg" style={styles.logo} alt="DeCellar Logo" />
+      <img src="assets/images/logos/logo.png" style={styles.logo} alt="DeCellar Logo" />
       <h1 style={styles.title}>Welcome to the DeCellar API</h1>
       <p style={styles.text}>
         You have successfully set up the DeCellar API. You can start building your backend
