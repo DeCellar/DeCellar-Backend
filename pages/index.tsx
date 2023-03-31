@@ -20,7 +20,8 @@ export default function IndexPage() {
       </p>
       <p style={styles.text}>
         The <code>HOST_API</code> variable is currently set to <code>{HOST_API}</code>. The{' '}
-        <code>DOMAIN</code> variable is currently set to <code>{DOMAIN}</code>.
+        <code>DOMAIN</code> variable is currently set to <code>{DOMAIN}</code> and bockchain network
+        is set to <code>{process.env.NETWORK}</code>.
       </p>
     </div>
   );
