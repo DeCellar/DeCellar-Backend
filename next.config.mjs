@@ -24,6 +24,8 @@ const nextConfig = {
     // NFT
     NFT_COLLECTION: process.env.NFT_COLLECTION,
     MARKETPLACE: process.env.MARKETPLACE,
+
+    MAILCHIMP_URL: process.env.MAILCHIMP_URL,
   },
 };
 
