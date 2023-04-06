@@ -1,17 +1,16 @@
 {
   "name": "decellar-api",
-  "description": "A backend API for the DeCellar",
+  "description": "DeCellar web application API for trading and investing in premium alcoholic beverages backed by NFTs.",
   "version": "1.0.0",
   "private": true,
   "keywords": [
-    "nft",
-    "wine",
+    "DeCellar",
+    "web application",
+    "React",
+    "NFT",
     "trading",
-    "platform",
-    "api",
-    "backend",
-    "polygon",
-    "decellar"
+    "investing",
+    "alcoholic beverages"
   ],
   "scripts": {
     "dev": "next dev",
@@ -19,33 +18,35 @@
     "start": "next start"
   },
   "dependencies": {
+    "@moralisweb3/evm-utils": "^2.12.0",
     "@thirdweb-dev/auth": "^3.0.5-dev-6a3dbb0",
     "@thirdweb-dev/sdk": "^3.9.0",
-    "axios": "^0.24.0",
+    "axios": "^1.3.4",
     "change-case": "^4.1.2",
     "cors": "^2.8.5",
     "date-fns": "^2.26.0",
-    "ethers": "^5.7.2",
+    "ethers": "5",
     "firebase-admin": "^11.0.1",
     "lodash": "^4.17.21",
-    "next": "^12.0.4",
-    "react": "^17.0.2",
-    "react-dom": "17.0.2",
-    "uuid": "^8.3.2"
+    "moralis": "^2.6.6",
+    "next": "^13.2.4",
+    "react": "^18.2.0",
+    "react-dom": "18.2.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
-    "@types/jsonwebtoken": "^8.5.6",
+    "@types/jsonwebtoken": "^9.0.1",
     "@types/lodash": "^4.14.177",
-    "@types/node": "^16.11.10",
-    "@types/react": "^17.0.37",
-    "@types/uuid": "^8.3.3",
+    "@types/node": "^18.15.11",
+    "@types/react": "^18.0.31",
+    "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
-    "eslint": "^7.32.0",
-    "eslint-config-next": "^12.0.4",
+    "eslint": "^8.37.0",
+    "eslint-config-next": "^13.2.4",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "prettier": "^2.5.0",
-    "typescript": "^4.5.2"
+    "typescript": "^5.0.3"
   }
 }

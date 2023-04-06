@@ -36,7 +36,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const nftsPromises = nftCollectionWithMetadata.map(async (contract) => {
       const nftContractAddress = contract.address;
       const nftContract = await sdk.getContract(nftContractAddress);
-      const nfts = await nftContract.erc721.getAll();
+      const nfts = await nftContract.erc721.getOwned(address as string);
+
       return {
         contractAddress: nftContractAddress,
         nfts: nfts,
