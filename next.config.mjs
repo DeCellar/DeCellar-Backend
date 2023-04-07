@@ -25,7 +25,9 @@ const nextConfig = {
     NFT_COLLECTION: process.env.NFT_COLLECTION,
     MARKETPLACE: process.env.MARKETPLACE,
 
-    MAILCHIMP_URL: process.env.MAILCHIMP_URL,
+    MAILCHIMP_API_KEY: process.env.MAILCHIMP_API_KEY,
+    MAILCHIMP_API_SERVER: process.env.MAILCHIMP_API_SERVER,
+    MAILCHIMP_AUDIENCE_ID: process.env.MAILCHIMP_AUDIENCE_ID,
   },
 };
 
