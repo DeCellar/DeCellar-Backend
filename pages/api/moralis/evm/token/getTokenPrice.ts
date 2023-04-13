@@ -9,17 +9,13 @@ const headers: any = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
-  const { address, chain, exchange, toBlock } = req.query;
+  const { currencyAddress } = req.query;
 
   try {
     const response = await axios.get(
-      `https://deep-index.moralis.io/api/v2/erc20/${address}/price?chain=${chain}&exchange=${exchange}`,
+      `https://deep-index.moralis.io/api/v2/erc20/${currencyAddress}/price?chain=eth&exchange=uniswap-v2`,
       {
         headers,
-        params: {
-          chain,
-          toBlock,
-        },
       }
     );
 

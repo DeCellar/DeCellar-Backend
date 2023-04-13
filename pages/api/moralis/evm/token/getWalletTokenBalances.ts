@@ -15,6 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const response = await axios.get(`https://deep-index.moralis.io/api/v2/${address}/erc20`, {
       headers,
       params: {
+        address,
         chain,
       },
     });
