@@ -8,10 +8,11 @@ const { NFT_COLLECTION, NETWORK } = process.env;
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
   try {
-    if (!NETWORK || !NFT_COLLECTION) {
+    if (!NFT_COLLECTION) {
       return res.status(500).send('Missing required environment variables');
     }
-    const sdk = new ThirdwebSDK(NETWORK);
+    const { chainId } = req.query;
+    const sdk = new ThirdwebSDK(chainId as string);
     const contract = await sdk.getContract(NFT_COLLECTION, 'nft-collection');
     const nfts = await contract.getAll();
 
