@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import cors from 'src/utils/cors';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
-import { type } from 'os';
 
 const { MARKETPLACE, NETWORK } = process.env;
 

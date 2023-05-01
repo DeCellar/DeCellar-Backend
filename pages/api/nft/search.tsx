@@ -21,6 +21,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         mediaItems: true,
       },
     });
+
+    console.log(response.data);
     const data = response.data.result;
 
     const nft = data.find((_product: any) => paramCase(_product.token_hash) === tokenHash);

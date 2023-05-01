@@ -4,15 +4,6 @@ import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 
 const { MARKETPLACE, NETWORK } = process.env;
 
-interface IWinningBid {
-  listingId: string;
-  buyerAddress: string;
-  quantityDesired: number;
-  pricePerToken: string;
-  currencyValue: string;
-  currencyContractAddress: string;
-}
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
   try {
