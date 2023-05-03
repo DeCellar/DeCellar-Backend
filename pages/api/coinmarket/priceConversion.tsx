@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
     let reqInstance = axios.create({
       headers: {
-        'X-CMC_PRO_API_KEY': `df781835-e5f4-4448-8b0a-fe31402ab3af`,
+        'X-CMC_PRO_API_KEY': `${process.env.COINMARKET_API}`,
       },
     });
     const response = await reqInstance.get(

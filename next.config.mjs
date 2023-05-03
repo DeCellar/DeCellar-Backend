@@ -30,6 +30,7 @@ const nextConfig = {
     MAILCHIMP_AUDIENCE_ID: process.env.MAILCHIMP_AUDIENCE_ID,
 
     ALCHEMY_API: process.env.ALCHEMY_API,
+    COINMARKET_API: process.env.COINMARKET_API,
   },
 };
 
