@@ -18,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       `https://pro-api.coinmarketcap.com/v2/tools/price-conversion?amount=1&symbol=${symbolA}&convert=${symbolB}`
     );
     const { data } = response;
-    res.status(200).json(data.data);
+    res.status(200).json(data.data[0].quote);
   } catch (error) {
     console.error(error);
     return res.status(500).send('Internal Server Error');
