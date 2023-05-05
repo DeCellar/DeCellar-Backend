@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           const highestBid = await contract.auction.getWinningBid(nft.id);
           return {
             assetContractAddress: nft.assetContractAddress,
-            tokenId: nft.tokenId.toString(),
+            tokenId: nft.id,
             highestBid: highestBid?.currencyValue?.displayValue || '0',
             metadata: nft.asset,
           };
