@@ -4,12 +4,6 @@ import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 
 const { MARKETPLACE, NETWORK } = process.env;
 
-interface INftWithBid {
-  assetContractAddress: string;
-  tokenId: string;
-  highestBid: string;
-}
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
   try {
@@ -20,16 +14,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const contract = await sdk.getContract(MARKETPLACE, 'marketplace');
     const nfts = await contract.getActiveListings();
 
-    const nftsWithBid: INftWithBid[] = await Promise.all(
+    const nftsWithBid = await Promise.all(
       nfts
         .filter((nft) => nft.type === 1) // Filter for type=1
         .map(async (nft) => {
           const highestBid = await contract.auction.getWinningBid(nft.id);
           return {
-            assetContractAddress: nft.assetContractAddress,
-            tokenId: nft.id,
             highestBid: highestBid?.currencyValue?.displayValue || '0',
-            metadata: nft.asset,
+            ...nft,
           };
         })
     );
@@ -38,7 +30,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return parseFloat(b.highestBid) - parseFloat(a.highestBid);
     });
 
-    res.status(200).json({ hotBids: nftsWithHighestBid });
+    const output = { hotBids: nftsWithHighestBid };
+    res.status(200).json(output);
   } catch (error) {
     console.error(error);
     return res.status(500).send('Internal Server Error');
