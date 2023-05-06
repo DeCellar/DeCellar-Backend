@@ -12,9 +12,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const { email } = req.body;
-
-    console.log(email);
-
     const data = {
       api_key: API_KEY,
       email_address: email,
