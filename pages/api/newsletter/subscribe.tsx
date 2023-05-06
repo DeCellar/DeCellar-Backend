@@ -4,38 +4,32 @@ import cors from 'src/utils/cors';
 
 const API_KEY = process.env.EMAIL_OCTOPUS_API;
 const LIST_ID = process.env.EMAIL_OCTOPUS_LIST_ID;
+
 const url = `https://emailoctopus.com/api/1.6/lists/${LIST_ID}/contacts`;
 
-const options = {
-  port: 443,
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${API_KEY}`,
-  },
-};
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  await cors(req, res);
 
-export default async function subscribeHandler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    await cors(req, res);
-
     const { email } = req.body;
 
-    if (!email) {
-      return res.status(400).json({ error: 'Invalid parameters: email is required' });
-    }
+    console.log(email);
 
     const data = {
       api_key: API_KEY,
       email_address: email,
+      tags: ['newsletter'],
       status: 'SUBSCRIBED',
     };
-
-    const response = await axios.post(url, data, options);
+    const response = await axios.post(
+      `https://emailoctopus.com/api/1.6/lists/${LIST_ID}/contacts`,
+      data
+    );
     const { status } = response.data;
 
-    res.status(200).json({ status });
+    return res.status(200).json({ status });
   } catch (error) {
-    console.error('Failed to subscribe email', error);
-    res.status(500).json({ error: 'Failed to subscribe email' });
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 }
