@@ -28,6 +28,7 @@
     "firebase-admin": "^11.0.1",
     "lodash": "^4.17.21",
     "next": "^13.2.4",
+    "openai": "^3.2.1",
     "react": "^18.2.0",
     "react-dom": "18.2.0",
     "socket.io": "^4.6.1",

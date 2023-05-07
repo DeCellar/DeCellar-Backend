@@ -36,6 +36,8 @@ const nextConfig = {
     ALCHEMY_AUTH_KEY: process.env.ALCHEMY_AUTH_KEY,
     WEBHOOK_ID: process.env.WEBHOOK_ID,
     COINMARKET_API: process.env.COINMARKET_API,
+
+    OPENAI_API: process.env.OPENAI_API,
   },
 };
 
