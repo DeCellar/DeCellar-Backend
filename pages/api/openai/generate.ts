@@ -13,20 +13,22 @@ const openai = new OpenAIApi(configuration);
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
   try {
-    const { name } = req.query;
+    const { prompt } = req.query;
 
-    if (!name) {
+    if (!prompt) {
       return res.status(500).send('Missing required environment variables');
     }
 
     const response = await openai.createCompletion({
       model: 'text-davinci-003',
-      prompt: `Generate attributes for an NFT: ${name}`,
+      //prompt: `Generate attributes for an NFT: ${name}`,
+      prompt: `${prompt}`,
       temperature: 0,
       max_tokens: 100,
     });
 
-    res.status(200).json({ result: response.data.choices[0].text });
+    const result = response.data.choices[0].text;
+    res.status(200).json({ result });
   } catch (error) {
     console.error(error);
     return res.status(500).send('Internal Server Error');
