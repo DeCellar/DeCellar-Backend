@@ -1,4 +1,4 @@
-# NFTPub Backend API
+# DeCellar Backend API
 
 ### Introduction
 
