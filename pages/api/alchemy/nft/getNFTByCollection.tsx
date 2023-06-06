@@ -5,7 +5,7 @@ import axios from 'src/utils/axios';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
 
-  const { alchemyNetwork, contractAddresse } = req.query;
+  const { alchemyNetwork, contractAddress, withMetadata } = req.query;
 
   const baseURL = `https://${alchemyNetwork}.g.alchemy.com/v2/${process.env.ALCHEMY_API}/getNFTsForCollection`;
 
@@ -13,8 +13,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Make the request and send the response back to the client
     const response = await axios.get(baseURL, {
       params: {
-        contractAddress: contractAddresse as string,
-        withMetadata: true,
+        contractAddress: contractAddress as string,
+        withMetadata: withMetadata || true,
         orderBy: 'transferTime',
       },
     });

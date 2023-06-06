@@ -12,7 +12,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
     const { collectionAddress, address, chainId } = req.query;
 
-    console.log(collectionAddress, address);
     const sdk = new ThirdwebSDK(chainId as string);
     const contract = await sdk.getContract(collectionAddress as string, 'nft-collection');
 
