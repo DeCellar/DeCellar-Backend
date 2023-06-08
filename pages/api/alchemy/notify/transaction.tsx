@@ -20,7 +20,7 @@ io.on('connection', (socket) => {
   console.log('Client connected');
   socket.on('disconnect', () => console.log('Client disconnected'));
   socket.on('register address', (msg) => {
-    //send address to Alchemy to add to notification
+    // send address to Alchemy to add to notification
     addAddress(msg);
   });
 });
@@ -49,6 +49,15 @@ async function addAddress(new_address: string) {
   }
 }
 
+// Notification feature
+function notificationReceived(req: NextApiRequest) {
+  console.log('notification received!');
+  const notificationData = req.body;
+
+  // Emit the processed notification data to the connected clients
+  io.emit('notification', JSON.stringify(notificationData));
+}
+
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
 
@@ -58,11 +67,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   } else {
     res.status(404).end();
   }
-}
-
-function notificationReceived(req: NextApiRequest) {
-  console.log('notification received!');
-  io.emit('notification', JSON.stringify(req.body));
 }
 
 server.listen(PORT, () => console.log(`Listening on ${PORT}`));
