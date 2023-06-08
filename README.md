@@ -7,7 +7,7 @@ Welcome to the Backend API for the NFT Wine Trading Platform. Our API is designe
 ### Getting Started
 
 ```
-npm install --legacy-peer-deps
+npm install
 npm run dev
 ```
 ### Request & Response Format
