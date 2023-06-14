@@ -61,13 +61,28 @@ function notificationReceived(req: NextApiRequest) {
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
 
-  if (req.method === 'POST' && req.url === '/alchemyhook') {
-    notificationReceived(req);
-    res.status(200).end();
+  if (req.method === 'GET' && req.url.startsWith('/api/events')) {
+    const walletAddress = req.query.walletAddress as string;
+
+    // Use the walletAddress to fetch the corresponding events from your data source
+    const events = await fetchEvents(walletAddress);
+
+    res.status(200).json(events);
   } else {
     res.status(404).end();
   }
 }
+
+async function fetchEvents(walletAddress: string) {
+  const events = [
+    { id: 1, title: 'Event 1', description: 'Description 1', type: 'type 1', createdAt: '2023-06-13T10:00:00Z' },
+    { id: 2, title: 'Event 2', description: 'Description 2', type: 'type 2', createdAt: '2023-06-13T11:00:00Z' },
+    { id: 3, title: 'Event 3', description: 'Description 3', type: 'type 3', createdAt: '2023-06-13T12:00:00Z' },
+  ];
+
+  return events;
+}
+
 
 server.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
