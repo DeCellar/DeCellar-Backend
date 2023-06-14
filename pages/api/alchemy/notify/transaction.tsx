@@ -3,6 +3,7 @@ import cors from 'src/utils/cors';
 import socketIO, { Server } from 'socket.io';
 import http from 'http';
 import axios from 'axios';
+import fetch from 'node-fetch';
 
 const PORT = process.env.PORT || 5000;
 const ALCHEMY_AUTH_KEY = process.env.ALCHEMY_AUTH_KEY;
@@ -74,15 +75,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function fetchEvents(walletAddress: string) {
-  const events = [
-    { id: 1, title: 'Event 1', description: 'Description 1', type: 'type 1', createdAt: '2023-06-13T10:00:00Z' },
-    { id: 2, title: 'Event 2', description: 'Description 2', type: 'type 2', createdAt: '2023-06-13T11:00:00Z' },
-    { id: 3, title: 'Event 3', description: 'Description 3', type: 'type 3', createdAt: '2023-06-13T12:00:00Z' },
-  ];
+  try {
+    // Make an API request to fetch events based on the wallet address
+    const response = await fetch(`http://localhost:3000/api/alchemy/notify/events?walletAddress=${walletAddress}`);
+    const events = await response.json();
 
-  return events;
+    return events;
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    return [];
+  }
 }
-
 
 server.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
