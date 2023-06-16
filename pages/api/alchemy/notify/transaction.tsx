@@ -32,6 +32,7 @@ async function addAddress(new_address: string) {
     addresses_to_add: [new_address],
     addresses_to_remove: [],
   };
+
   try {
     const response = await axios.patch(
       'https://dashboard.alchemyapi.io/api/update-webhook-addresses',
