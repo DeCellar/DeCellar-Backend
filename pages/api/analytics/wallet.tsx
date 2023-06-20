@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import process from 'process';
-import cors from 'src/utils/cors';
-import axios from 'src/utils/axios';
-import { fPercentChange } from 'src/utils/math';
+import cors from '../../src/utils/cors';
+import axios from '../../src/utils/axios';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 
 const { NETWORK } = process.env;

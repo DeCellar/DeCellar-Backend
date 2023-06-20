@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 // next
 import { NextApiRequest, NextApiResponse } from 'next';
 // utils
-import cors from 'src/utils/cors';
+import cors from '../../.././src/utils/cors';
 
 // ----------------------------------------------------------------------
 

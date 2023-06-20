@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { paramCase } from 'change-case';
-import cors from 'src/utils/cors';
-import axios from 'src/utils/axios';
+import cors from '../.././src/utils/cors';
+import axios from '../.././src/utils/axios';
 
 const headers: any = {
   accept: 'application/json',

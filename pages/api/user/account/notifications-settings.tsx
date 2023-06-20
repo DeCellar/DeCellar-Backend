@@ -1,11 +1,8 @@
 // next
-import { NextApiRequest, NextApiResponse } from "next";
-import cors from "src/utils/cors";
+import { NextApiRequest, NextApiResponse } from 'next';
+import cors from '../../../src/utils/cors';
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
 
   const notifications = {
@@ -14,7 +11,7 @@ export default async function handler(
     activityFollows: false,
     applicationNews: true,
     applicationProduct: false,
-    applicationBlog: false
+    applicationBlog: false,
   };
 
   res.status(200).json({ notifications });

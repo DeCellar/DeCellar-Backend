@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import axios from 'src/utils/axios';
-import cors from 'src/utils/cors';
+import axios from '../.././src/utils/axios';
+import cors from '../.././src/utils/cors';
 
 const API_KEY = process.env.EMAIL_OCTOPUS_API;
 const LIST_ID = process.env.EMAIL_OCTOPUS_LIST_ID;

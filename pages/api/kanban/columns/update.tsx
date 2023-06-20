@@ -1,8 +1,8 @@
-import cors from 'src/utils/cors';
 // next
 import { NextApiRequest, NextApiResponse } from 'next';
+import cors from '../../../src/utils/cors';
 // _mock
-import { board } from '../../../../src/_mock/_kanban';
+import { board } from '../../../src/_mock/_kanban';
 
 // ----------------------------------------------------------------------
 

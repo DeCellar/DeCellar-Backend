@@ -1,6 +1,6 @@
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import cors from 'src/utils/cors';
+import cors from '../.././src/utils/cors';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);

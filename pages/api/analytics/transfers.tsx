@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import cors from 'src/utils/cors';
-import axios from 'src/utils/axios';
+import cors from '../../src/utils/cors';
+import axios from '../../src/utils/axios';
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 

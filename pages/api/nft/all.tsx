@@ -1,7 +1,7 @@
 import { paramCase } from 'change-case';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
-import cors from 'src/utils/cors';
+import cors from '../.././src/utils/cors';
 
 const { NFT_COLLECTION, NETWORK } = process.env;
 

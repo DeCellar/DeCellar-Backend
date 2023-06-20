@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import cors from 'src/utils/cors';
+import cors from '../../src/utils/cors';
+import { fPercentChange, fSumArray } from '../../src/utils/math';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
-import { fPercentChange, fSumArray } from 'src/utils/math';
 
 const { NETWORK, NFT_COLLECTION, PRIVATE_KEY } = process.env;
 

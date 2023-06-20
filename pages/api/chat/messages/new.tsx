@@ -3,15 +3,15 @@ import { sub } from 'date-fns';
 // next
 import { NextApiRequest, NextApiResponse } from 'next';
 // @types
-import { Message } from 'src/@types/chat';
-import cors from 'src/utils/cors';
+import { Message } from '../../.././src/@types/chat';
+import cors from '../../.././src/utils/cors';
 // _mock
 import {
   contacts,
   MY_CONTACT,
   findConversationById,
   findConversationByParticipantIds,
-} from '../../../../src/_mock/_chat';
+} from '../../.././src/_mock/_chat';
 
 // ----------------------------------------------------------------------
 

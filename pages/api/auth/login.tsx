@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { verifyLogin } from '@thirdweb-dev/auth/evm';
-import initializeFirebaseServer from '../../../src/firebase/initAdmin';
-import cors from '../../../src/utils/cors';
+import initializeFirebaseServer from '../../src/firebase/initAdmin';
+import cors from '../../src/utils/cors';
 import { DOMAIN } from '../../../config';
 
 export default async function login(req: NextApiRequest, res: NextApiResponse) {

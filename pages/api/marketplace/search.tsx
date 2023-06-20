@@ -1,6 +1,6 @@
 import { paramCase } from 'change-case';
 import { NextApiRequest, NextApiResponse } from 'next';
-import cors from 'src/utils/cors';
+import cors from '../../src/utils/cors';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 
 const { MARKETPLACE, NETWORK } = process.env;

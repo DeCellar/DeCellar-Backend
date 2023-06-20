@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import cors from 'src/utils/cors';
+import cors from '../../src/utils/cors';
+import { fPercentChange, fSumArray } from '../../src/utils/math';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
-import { fPercentChange, fSumArray } from 'src/utils/math';
 
 const { MARKETPLACE, NETWORK } = process.env;
 
@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       today.getMonth(),
       today.getDate() - today.getDay()
     );
-    
+
     const lastWeekStart = new Date(thisWeekStart.getTime() - 7 * 24 * 60 * 60 * 1000);
     const lastWeekEnd = new Date(thisWeekStart.getTime() - 1 * 24 * 60 * 60 * 1000);
 
