@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import cors from '../../../src/utils/cors';
+import cors from '../../../../src/utils/cors';
 import socketIO, { Server } from 'socket.io';
 import http from 'http';
 import axios from 'axios';

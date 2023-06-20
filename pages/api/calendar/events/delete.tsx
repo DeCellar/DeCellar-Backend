@@ -1,7 +1,7 @@
 // next
 import { NextApiRequest, NextApiResponse } from 'next';
 // utils
-import cors from '../../.././src/utils/cors';
+import cors from '../../../../src/utils/cors';
 
 // ----------------------------------------------------------------------
 

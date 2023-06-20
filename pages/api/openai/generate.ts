@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import cors from '../.././src/utils/cors';
+import cors from '../../../src/utils/cors';
 const { Configuration, OpenAIApi } = require('openai');
 
 const configuration = new Configuration({

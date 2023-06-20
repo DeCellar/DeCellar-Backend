@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import cors from '../../../src/utils/cors';
-import axios from '../../../src/utils/axios';
+import cors from '../../../../src/utils/cors';
+import axios from '../../../../src/utils/axios';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);

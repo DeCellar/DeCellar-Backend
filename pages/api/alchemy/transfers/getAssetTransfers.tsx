@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import cors from '../../../src/utils/cors';
-import axios from '../../../src/utils/axios';
+import cors from '../../../../src/utils/cors';
+import axios from '../../../../src/utils/axios';
 
 // Alchemy URL --> Replace with your API key at the end
 

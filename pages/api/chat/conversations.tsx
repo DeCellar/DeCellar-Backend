@@ -1,8 +1,8 @@
 // next
 import { NextApiRequest, NextApiResponse } from 'next';
-import cors from '../.././src/utils/cors';
+import cors from '../../../src/utils/cors';
 // _mock
-import { conversations } from '../.././src/_mock/_chat';
+import { conversations } from '../../../src/_mock/_chat';
 
 // ----------------------------------------------------------------------
 

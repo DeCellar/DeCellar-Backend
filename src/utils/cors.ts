@@ -1,6 +1,6 @@
 import Cors from 'cors';
 import initMiddleware from './init-middleware';
-import { DOMAIN } from '../../../config';
+import { DOMAIN } from '../../config';
 
 // Initialize the cors middleware
 const cors = initMiddleware(
