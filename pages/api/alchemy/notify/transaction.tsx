@@ -2,8 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import cors from 'src/utils/cors';
 import socketIO, { Server } from 'socket.io';
 import http from 'http';
-import axios from 'axios';
-import fetch from 'node-fetch';
+import axios from 'src/utils/axios';
+
 
 const PORT = process.env.PORT || 5000;
 const ALCHEMY_AUTH_KEY = process.env.ALCHEMY_AUTH_KEY;
@@ -77,7 +77,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 async function fetchEvents(walletAddress: string) {
   try {
     // Make an API request to fetch events based on the wallet address
-    const response = await fetch(`http://localhost:3000/api/alchemy/notify/events?walletAddress=${walletAddress}`);
+    const response = await fetch(`https://api.decellar.it/api/alchemy/notify/events?walletAddress=${walletAddress}`);
     const events = await response.json();
 
     return events;
