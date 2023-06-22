@@ -62,7 +62,7 @@ function notificationReceived(req: NextApiRequest) {
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
 
-  if (req.method === 'GET' && req.url.startsWith('/api/events')) {
+  if (req.method === 'GET' && req.url && req.url.startsWith('/api/events')) {
     const walletAddress = req.query.walletAddress as string;
 
     // Use the walletAddress to fetch the corresponding events from your data source
