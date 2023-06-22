@@ -3,7 +3,6 @@ import cors from 'src/utils/cors';
 import socketIO, { Server } from 'socket.io';
 import http from 'http';
 import axios from 'axios';
-import fetch from 'node-fetch';
 
 const PORT = process.env.PORT || 5000;
 const ALCHEMY_AUTH_KEY = process.env.ALCHEMY_AUTH_KEY;
@@ -51,24 +50,28 @@ async function addAddress(new_address: string) {
 }
 
 // Notification feature
-function notificationReceived(req: NextApiRequest) {
+function notificationReceived(req: NextApiRequest, res: NextApiResponse) {
   console.log('notification received!');
   const notificationData = req.body;
 
   // Emit the processed notification data to the connected clients
   io.emit('notification', JSON.stringify(notificationData));
+
+  res.status(200).end();
 }
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
 
-  if (req.method === 'GET' && req.url.startsWith('/api/events')) {
+  if (req.method === 'GET' && req.url && req.url.startsWith('/api/events')) {
     const walletAddress = req.query.walletAddress as string;
 
     // Use the walletAddress to fetch the corresponding events from your data source
     const events = await fetchEvents(walletAddress);
 
     res.status(200).json(events);
+  } else if (req.method === 'POST' && req.url && req.url.startsWith('/api/notifications')) {
+    notificationReceived(req, res);
   } else {
     res.status(404).end();
   }
@@ -76,11 +79,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 async function fetchEvents(walletAddress: string) {
   try {
-    // Make an API request to fetch events based on the wallet address
-    const response = await fetch(`http://localhost:3000/api/alchemy/notify/events?walletAddress=${walletAddress}`);
-    const events = await response.json();
+    const response = await axios.get(`http://localhost:3000/api/alchemy/notify/events`, {
+      params: {
+        walletAddress: walletAddress,
+      },
+    });
 
-    return events;
+    return response.data;
   } catch (error) {
     console.error('Error fetching events:', error);
     return [];
