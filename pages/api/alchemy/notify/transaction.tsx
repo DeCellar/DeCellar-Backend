@@ -2,7 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import cors from 'src/utils/cors';
 import socketIO, { Server } from 'socket.io';
 import http from 'http';
-import axios from 'axios';
+import axios from 'src/utils/axios';
+
 
 const PORT = process.env.PORT || 5000;
 const ALCHEMY_AUTH_KEY = process.env.ALCHEMY_AUTH_KEY;
@@ -50,14 +51,12 @@ async function addAddress(new_address: string) {
 }
 
 // Notification feature
-function notificationReceived(req: NextApiRequest, res: NextApiResponse) {
+function notificationReceived(req: NextApiRequest) {
   console.log('notification received!');
   const notificationData = req.body;
 
   // Emit the processed notification data to the connected clients
   io.emit('notification', JSON.stringify(notificationData));
-
-  res.status(200).end();
 }
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -70,8 +69,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const events = await fetchEvents(walletAddress);
 
     res.status(200).json(events);
-  } else if (req.method === 'POST' && req.url && req.url.startsWith('/api/notifications')) {
-    notificationReceived(req, res);
   } else {
     res.status(404).end();
   }
@@ -79,13 +76,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 async function fetchEvents(walletAddress: string) {
   try {
-    const response = await axios.get(`http://localhost:3000/api/alchemy/notify/events`, {
-      params: {
-        walletAddress: walletAddress,
-      },
-    });
+    // Make an API request to fetch events based on the wallet address
+    const response = await fetch(`https://api.decellar.it/api/alchemy/notify/events?walletAddress=${walletAddress}`);
+    const events = await response.json();
 
-    return response.data;
+    return events;
   } catch (error) {
     console.error('Error fetching events:', error);
     return [];
