@@ -69,6 +69,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const events = await fetchEvents(walletAddress);
 
     res.status(200).json(events);
+  } else if (req.method === 'POST' && req.url && req.url.startsWith('/api/notifications')) {
+    notificationReceived(req);
   } else {
     res.status(404).end();
   }
