@@ -4,7 +4,6 @@ import socketIO, { Server } from 'socket.io';
 import http from 'http';
 import axios from 'src/utils/axios';
 
-
 const PORT = process.env.PORT || 5000;
 const ALCHEMY_AUTH_KEY = process.env.ALCHEMY_AUTH_KEY;
 const WEBHOOK_ID = process.env.WEBHOOK_ID;
@@ -56,13 +55,13 @@ function notificationReceived(req: NextApiRequest) {
   const notificationData = req.body;
 
   // Emit the processed notification data to the connected clients
-  io.emit('notification', JSON.stringify(notificationData));
+  io.emit('notification', notificationData);
 }
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
 
-  if (req.method === 'GET' && req.url && req.url.startsWith('/api/events')) {
+  if (req.method === 'POST' && req.url && req.url === '/api/notifications') {
     const walletAddress = req.query.walletAddress as string;
 
     // Use the walletAddress to fetch the corresponding events from your data source
@@ -79,7 +78,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 async function fetchEvents(walletAddress: string) {
   try {
     // Make an API request to fetch events based on the wallet address
-    const response = await fetch(`https://api.decellar.it/api/alchemy/notify/events?walletAddress=${walletAddress}`);
+    const response = await fetch(
+      `https://decellar-backend-app-24bb09bb62b6.herokuapp.com/api/events?walletAddress=${walletAddress}`
+    );
     const events = await response.json();
 
     return events;
