@@ -7,27 +7,36 @@ import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
   try {
-    const { address, chainId } = req.query;
+    const { address, chainId, special } = req.query;
     const sdk = new ThirdwebSDK(chainId as string);
     const contractList = await sdk.getContractList(address as string);
+
+    const allowedContractTypes =
+      special === 'true'
+        ? ['edition', 'edition-drop', 'nft-drop', 'signature-drop']
+        : ['nft-collection'];
 
     const nftCollection = [];
     const metadataPromises = [];
     for (const contract of contractList) {
       const contractType = await contract.contractType();
-      if (contractType === 'nft-collection') {
+      if (allowedContractTypes.includes(contractType)) {
         metadataPromises.push(contract.metadata());
-        nftCollection.push(contract);
+        nftCollection.push({
+          contract,
+          contractType,
+        });
       }
     }
 
     const metadata = await Promise.all(metadataPromises);
     const nftCollectionWithMetadata = nftCollection
-      .map((contract, index) => ({
-        ...contract,
+      .map((item, index) => ({
+        contract: item.contract,
+        contractType: item.contractType,
         metadata: metadata[index],
       }))
-      .filter((contract) => contract.chainId.toString() === chainId);
+      .filter((item) => item.contract.chainId.toString() === chainId);
 
     return res.status(200).json({ nftCollection: nftCollectionWithMetadata });
   } catch (error) {
