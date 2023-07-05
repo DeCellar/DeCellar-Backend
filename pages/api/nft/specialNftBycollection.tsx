@@ -5,10 +5,10 @@ import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
   try {
-    const { collectionAddress, address, chainId } = req.query;
+    const { collectionAddress, chainId } = req.query;
     const sdk = new ThirdwebSDK(chainId as string);
-    const contract = await sdk.getContract(collectionAddress as string, 'nft-collection');
-    const nfts = await contract.erc721.getOwned(address as string);
+    const contract = await sdk.getContract(collectionAddress as string);
+    const nfts = await contract.erc1155.getAll();
     res.status(200).json({ nfts });
   } catch (error) {
     console.error(error);
