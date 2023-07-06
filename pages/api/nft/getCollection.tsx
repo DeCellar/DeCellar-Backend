@@ -10,9 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { address, chainId } = req.query;
     const sdk = new ThirdwebSDK(chainId as string);
     const contract = await sdk.getContract(address as string, 'nft-collection');
-    console.log(contract);
     const metadata: any = await contract.metadata.get();
-
     return res.status(200).json({ metadata });
   } catch (error) {
     console.error(error);
