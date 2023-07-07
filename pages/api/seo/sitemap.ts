@@ -16,7 +16,7 @@ export default async function Sitemap(req: NextApiRequest, res: NextApiResponse)
   const baseUrl = `https://www.decellar.${extension ? extension : 'io'}`;
 
   const postLinks = postId.map((id) => ({
-    url: `${baseUrl}/posts/${id}`,
+    url: `${baseUrl}/blog/post/${id}`,
     changefreq: 'weekly',
     priority: 0.9,
   }));
