@@ -10,6 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!NETWORK || !MARKETPLACE) {
       return res.status(500).send('Missing required environment variables');
     }
+
     const sdk = new ThirdwebSDK(NETWORK);
     const contract = await sdk.getContract(MARKETPLACE, 'marketplace');
     const nfts = await contract.getActiveListings();
@@ -19,15 +20,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         .filter((nft) => nft.type === 1) // Filter for type=1
         .map(async (nft) => {
           const highestBid = await contract.auction.getWinningBid(nft.id);
+          const getOffers = await contract.getOffers(nft.id);
+
           return {
-            highestBid: highestBid?.currencyValue?.displayValue || '0',
+            highestBid,
+            offers: getOffers,
             ...nft,
           };
         })
     );
 
     const nftsWithHighestBid = nftsWithBid.sort((a, b) => {
-      return parseFloat(b.highestBid) - parseFloat(a.highestBid);
+      const aBid = Number(a?.highestBid?.currencyValue?.value || 0);
+      const bBid = Number(b?.highestBid?.currencyValue?.value || 0);
+      return bBid - aBid;
     });
 
     const output = { hotBids: nftsWithHighestBid };
