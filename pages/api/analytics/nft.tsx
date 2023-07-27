@@ -3,7 +3,7 @@ import cors from '../../../src/utils/cors';
 import { fPercentChange, fSumArray } from '../../../src/utils/math';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 
-const { NETWORK, NFT_COLLECTION, PRIVATE_KEY } = process.env;
+const { NETWORK, NFT_COLLECTION } = process.env;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);

@@ -14,8 +14,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const sdk = new ThirdwebSDK(NETWORK);
     const contract = await sdk.getContract(MARKETPLACE, 'marketplace');
 
-    var data = await contract.auction.getWinningBid(listingId as string);
-    res.status(200).json({ data });
+    const winningBid = await contract.auction.getWinningBid(listingId as string);
+    res.status(200).json(winningBid);
   } catch (error) {
     console.error(error);
     return res.status(500).send('Internal Server Error');

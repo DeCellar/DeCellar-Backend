@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const contract = await sdk.getContract(MARKETPLACE, 'marketplace');
     const { listingId } = req.query;
     const getOffers = await contract.getOffers(listingId as string);
-    res.status(200).json({ getOffers });
+    res.status(200).json(getOffers);
   } catch (error) {
     console.error(error);
     return res.status(500).send('Internal Server Error');

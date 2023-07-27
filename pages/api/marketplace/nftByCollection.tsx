@@ -27,7 +27,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const nftsWithBid = await Promise.all(
       filteredListings.map(async (nft) => {
         if (nft.type !== 1) {
-          // If type is not 1, return an empty highestBid
           return {
             ...nft,
             highestBid: null,
