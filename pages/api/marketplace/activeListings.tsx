@@ -20,7 +20,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return nfts.push(listing);
       }
     });
-    res.status(200).json({ nfts });
+
+    const nftsWithBid = await Promise.all(
+      nfts.map(async (nft: any) => {
+        if (nft.type === 0) {
+          // For type === 0 (non-auction listings)
+          return {
+            ...nft,
+            highestBid: null,
+            offers: [],
+          };
+        }
+
+        // For type === 1 (auction listings)
+        const highestBid = await contract.auction.getWinningBid(nft.id);
+        const getOffers = await contract.getOffers(nft.id);
+
+        return {
+          ...nft,
+          highestBid,
+          offers: getOffers,
+        };
+      })
+    );
+
+    res.status(200).json({ nfts: nftsWithBid });
   } catch (error) {
     console.error(error);
     return res.status(500).send('Internal Server Error');
