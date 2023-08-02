@@ -5,7 +5,7 @@ import axios from '../../../../src/utils/axios';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
 
-  const { address, alchemyNetwork, metadata } = req.query;
+  const { address, alchemyNetwork, metadata, pageSize } = req.query;
 
   const baseURL = `https://${alchemyNetwork}.g.alchemy.com/v2/${process.env.ALCHEMY_API}/getNFTs`;
 
@@ -16,6 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         owner: address as string,
         withMetadata: metadata || false,
         orderBy: 'transferTime',
+        pageSize: pageSize,
       },
     });
 
