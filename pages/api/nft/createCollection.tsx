@@ -8,6 +8,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   await cors(req, res);
   try {
     const { chainId } = req.query;
+    if (!chainId) {
+      return res.status(500).send('Missing chain id');
+    }
+
     const sdk = new ThirdwebSDK(chainId as string);
     const { metadata } = req.query;
     const createCollection = await sdk.deployer.deployNFTCollection(metadata as any);

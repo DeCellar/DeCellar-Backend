@@ -12,6 +12,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(500).send('Missing required environment variables');
     }
     const { chainId } = req.query;
+    if (!chainId) {
+      return res.status(500).send('Missing chain id');
+    }
     const sdk = new ThirdwebSDK(chainId as string);
     const contract = await sdk.getContract(NFT_COLLECTION, 'nft-collection');
     const { id } = req.body;

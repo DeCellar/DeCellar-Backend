@@ -3,15 +3,21 @@ import cors from '../../../src/utils/cors';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  await cors(req, res);
   try {
+    await cors(req, res);
+
     const { address, chainId } = req.query;
+
+    if (!address || !chainId) {
+      return res.status(400).json({ message: 'Missing required parameters' });
+    }
 
     const sdk = new ThirdwebSDK(chainId as string);
     const contractList = await sdk.getContractList(address as string);
 
     const nftCollection = [];
     const metadataPromises = [];
+
     for (const contract of contractList) {
       const contractType = await contract.contractType();
       if (contractType === 'nft-collection') {
@@ -44,6 +50,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json({ nfts });
   } catch (error) {
     console.error(error);
-    return res.status(500).send('Internal Server Error');
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 }

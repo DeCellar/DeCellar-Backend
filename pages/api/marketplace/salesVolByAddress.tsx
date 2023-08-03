@@ -11,18 +11,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(500).send('Missing required environment variables');
     }
 
-    const { assetContract } = req.query;
+    const { address } = req.query;
 
-    if (!assetContract || typeof assetContract !== 'string') {
+    if (!address || typeof address !== 'string') {
       return res.status(400).send('Invalid asset contract');
     }
 
     const sdk = new ThirdwebSDK(NETWORK);
     const contract = await sdk.getContract(MARKETPLACE, 'marketplace');
     const events = await contract.events.getEvents('NewSale');
-    const salesForAssetContract = events.filter(
-      (event) => event.data.assetContract === assetContract
-    );
+    const salesForAssetContract = events.filter((event) => event.data.assetContract === address);
 
     let saleVolume = 0;
     salesForAssetContract.forEach((sale) => {
