@@ -1,0 +1,25 @@
+# cancelListing.tsx
+openapi: 3.0.0
+info:
+  title: Cancel Listing
+  version: 1.0.0
+paths:
+  /api/marketplace/cancelListing:
+    post:
+      summary: Cancel a listing
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully cancelled listing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cancelDirectListing:
+                    type: object

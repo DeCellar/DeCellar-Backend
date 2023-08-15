@@ -1,0 +1,21 @@
+openapi: 3.0.0
+info:
+  title: Get Offers for Listing
+  version: 1.0.0
+paths:
+  /api/marketplace/offers:
+    get:
+      summary: Get offers for a listing
+      parameters:
+        - name: listingId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully retrieved offers
+          content:
+            application/json:
+              schema:
+                type: object

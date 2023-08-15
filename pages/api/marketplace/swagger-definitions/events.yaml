@@ -1,0 +1,21 @@
+# events.tsx
+openapi: 3.0.0
+info:
+  title: Get Marketplace Events
+  version: 1.0.0
+paths:
+  /api/marketplace/events:
+    get:
+      summary: Get all marketplace events
+      responses:
+        200:
+          description: Successfully retrieved marketplace events
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      type: object

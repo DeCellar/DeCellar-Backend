@@ -1,0 +1,42 @@
+openapi: 3.0.0
+info:
+  title: Analytics API - transfers
+  version: 1.0.0
+paths:
+  /api/analytics/transfers:
+    get:
+      summary: Get asset transfer analytics
+      parameters:
+        - name: fromAddress
+          in: query
+          description: Sender's wallet address
+          schema:
+            type: string
+        - name: toAddress
+          in: query
+          description: Receiver's wallet address
+          schema:
+            type: string
+        - name: alchemyNetwork
+          in: query
+          description: Alchemy network (e.g., mainnet)
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                currentYear:
+                  year: 2023
+                  monthlyTransfers: [5, 3, 7, 2, 0, 1, 9, 0, 0, 0, 0, 0]
+                previousYear:
+                  year: 2022
+                  monthlyTransfers: [3, 1, 4, 0, 2, 1, 6, 0, 0, 0, 0, 0]
+                totalValueCurrentYear: 28
+                totalValuePrevYear: 17
+                percentGrowthCurrentMonth: 67.5
+                percentGrowthCurrentYear: 64.71

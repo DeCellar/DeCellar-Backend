@@ -1,0 +1,56 @@
+openapi: 3.0.0
+info:
+  title: NFT API
+  version: 1.0.0
+paths:
+  /nft/burn:
+    post:
+      summary: Burn NFT
+      parameters:
+        - name: chainId
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "ethereum"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: "123456"
+      responses:
+        "200":
+          description: Burn NFT successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: "NFT burned successfully"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Missing chain ID"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "An error occurred"

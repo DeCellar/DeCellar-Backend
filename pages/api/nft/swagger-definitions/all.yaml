@@ -1,0 +1,39 @@
+openapi: 3.0.0
+info:
+  title: Get NFT by Product Name
+  description: Get NFT information by providing the chain ID and product name.
+  version: 1.0.0
+servers:
+  - url: /
+tags:
+  - name: NFT
+    description: NFT-related operations
+paths:
+  /nft/all:
+    get:
+      summary: Get NFT by Product Name
+      tags:
+        - NFT
+      parameters:
+        - in: query
+          name: chainId
+          required: true
+          description: The chain ID
+          schema:
+            type: string
+        - in: query
+          name: name
+          required: true
+          description: The product name
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product:
+                    type: object

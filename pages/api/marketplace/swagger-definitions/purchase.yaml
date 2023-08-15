@@ -1,0 +1,26 @@
+openapi: 3.0.0
+info:
+  title: Purchase Listing
+  version: 1.0.0
+paths:
+  /api/marketplace/purchase:
+    post:
+      summary: Purchase a listing
+      parameters:
+        - name: listingId
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: quantityDesired
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully purchased listing
+          content:
+            application/json:
+              schema:
+                type: object

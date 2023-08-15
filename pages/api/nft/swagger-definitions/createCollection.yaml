@@ -1,0 +1,33 @@
+# createCollection.tsx
+openapi: 3.0.0
+info:
+  title: Create NFT Collection
+  version: 1.0.0
+paths:
+  /api/nft/createCollection:
+    post:
+      summary: Create a new NFT collection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                chainId:
+                  type: string
+                metadata:
+                  type: object
+              required:
+                - chainId
+                - metadata
+      responses:
+        200:
+          description: Successfully created the NFT collection
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  createCollection:
+                    type: object
