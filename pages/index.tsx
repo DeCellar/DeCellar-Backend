@@ -9,7 +9,7 @@ export default function IndexPage() {
         <meta name="description" content="DeCellar API for NFT marketplace" />
         <meta name="keywords" content="wine, API, DeCellar, selling" />
         <meta name="author" content="DeCellar" />
-        <link rel="icon" href="assets/images/logos/logo.png" />
+        <link rel="icon" href="assets/logo/logo.png" />
       </Head>
       <img src="assets/images/logos/logo.png" style={styles.logo} alt="DeCellar Logo" />
       <h1 style={styles.title}>Welcome to the DeCellar API</h1>
