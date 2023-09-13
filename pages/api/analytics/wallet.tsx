@@ -4,7 +4,7 @@ import cors from '../../../src/utils/cors';
 import axios from '../../../src/utils/axios';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 
-const { NETWORK } = process.env;
+const { NETWORK, PRIVATE_KEY, THIRDWEB_SECRET_KEY } = process.env;
 interface NftCollectionItem {
   address: string;
   chainId: number;
@@ -65,7 +65,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
     const { address, chain } = req.query;
 
-    const sdk = new ThirdwebSDK(NETWORK);
+    const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, NETWORK, {
+      secretKey: THIRDWEB_SECRET_KEY,
+    });
+
     const contractList = await sdk.getContractList(address as string);
     const nftCollectionPromises = contractList.map(async (contract) => {
       const contractType = await contract.contractType();

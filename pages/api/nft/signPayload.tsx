@@ -1,6 +1,8 @@
-import { ThirdwebSDK } from '@thirdweb-dev/sdk';
+import { ChainId, ThirdwebSDK } from '@thirdweb-dev/sdk';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import cors from '../../../src/utils/cors';
+
+const { PRIVATE_KEY, THIRDWEB_SECRET_KEY } = process.env;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -21,11 +23,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       attributes,
       images,
       collectionAddress,
-      networkId,
+      chainId,
       address,
     } = req.body;
 
-    if (!collectionAddress || !networkId || !address || !name) {
+    if (!collectionAddress || !chainId || !address || !name) {
       return res.status(400).json({ error: 'Missing required parameters' });
     }
 
@@ -45,12 +47,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       images,
     };
 
-    // Initialize the Thirdweb SDK on the server-side
-    const sdk = ThirdwebSDK.fromPrivateKey(
-      // Your wallet private key (read it in from .env.local file)
-      process.env.PRIVATE_KEY as string,
-      Number(networkId)
-    );
+    const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, chainId, {
+      secretKey: THIRDWEB_SECRET_KEY,
+    });
 
     // Load the NFT Collection via its contract address using the SDK
     const nftCollection = await sdk.getContract(collectionAddress, 'nft-collection');

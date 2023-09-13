@@ -10,7 +10,7 @@ import { ThirdwebSDK } from '@thirdweb-dev/sdk';
    the auctioned items. 
    */
 }
-const { MARKETPLACE, NETWORK } = process.env;
+const { MARKETPLACE, NETWORK, PRIVATE_KEY, THIRDWEB_SECRET_KEY } = process.env;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
@@ -18,7 +18,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!NETWORK || !MARKETPLACE) {
       return res.status(500).send('Missing required environment variables');
     }
-    const sdk = new ThirdwebSDK(NETWORK);
+    const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, NETWORK, {
+      secretKey: THIRDWEB_SECRET_KEY,
+    });
     const contract = await sdk.getContract(MARKETPLACE, 'marketplace');
     const { bufferBps } = req.query;
     const setBidBuffer = await contract.setBidBufferBps(bufferBps as any);

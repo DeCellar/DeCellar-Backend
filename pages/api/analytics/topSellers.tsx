@@ -4,7 +4,7 @@ import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 import { ethers } from 'ethers';
 import initializeFirebaseServer from '../../../src/firebase/initAdmin';
 
-const { NETWORK, MARKETPLACE } = process.env;
+const { NETWORK, MARKETPLACE, PRIVATE_KEY, THIRDWEB_SECRET_KEY } = process.env;
 
 type TimeIntervalKeys = '1hr' | '6hr' | '24hr' | '7days' | '30days';
 
@@ -16,7 +16,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(500).send('Missing required environment variables');
     }
 
-    const sdk = new ThirdwebSDK(NETWORK);
+    const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, NETWORK, {
+      secretKey: THIRDWEB_SECRET_KEY,
+    });
+
     const provider = new ethers.providers.JsonRpcProvider(
       `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_API}`
     );
