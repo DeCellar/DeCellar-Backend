@@ -10,12 +10,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!NETWORK || !MARKETPLACE) {
       return res.status(500).send('Missing required environment variables');
     }
+
+    const listerAddress = req.query.address as string;
+
     const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, NETWORK, {
       secretKey: THIRDWEB_SECRET_KEY,
     });
     const contract = await sdk.getContract(MARKETPLACE, 'marketplace');
 
-    const events = await contract.events.getEvents('NewSale');
+    let events = await contract.events.getEvents('NewSale');
+
+    // Filter by lister address if provided
+    if (listerAddress) {
+      events = events.filter(
+        (event) => event.data.lister.toLowerCase() === listerAddress.toLowerCase()
+      );
+    }
 
     // Filter sales for type 0 and type 1
     const type0Sales = [];
