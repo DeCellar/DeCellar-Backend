@@ -1,0 +1,60 @@
+openapi: 3.0.0
+info:
+  title: Get Asset Transfers
+  version: 1.0.0
+paths:
+  /alchemy/transfers/getAssetTransfers:
+    get:
+      summary: Get asset transfers
+      parameters:
+        - name: alchemyNetwork
+          in: query
+          required: true
+          description: Alchemy network (mainnet, rinkeby, etc.)
+          schema:
+            type: string
+        - name: fromAddress
+          in: query
+          description: Source address
+          schema:
+            type: string
+        - name: toAddress
+          in: query
+          description: Destination address
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: Asset type (e.g., erc20, erc721)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetTransfersResponse'
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+components:
+  schemas:
+    AssetTransfersResponse:
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            transfers:
+              type: array
+              items:
+                $ref: '#/components/schemas/Transfer'

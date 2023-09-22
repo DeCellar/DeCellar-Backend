@@ -1,0 +1,45 @@
+openapi: 3.0.0
+info:
+  title: Get NFTs for Collection
+  version: 1.0.0
+paths:
+  /alchemy/nft/getNFTByCollection:
+    get:
+      summary: Get NFTs for a Collection
+      parameters:
+        - name: alchemyNetwork
+          in: query
+          required: true
+          description: Alchemy network (mainnet, rinkeby, etc.)
+          schema:
+            type: string
+        - name: contractAddress
+          in: query
+          required: true
+          description: Contract address of the NFT collection
+          schema:
+            type: string
+        - name: withMetadata
+          in: query
+          required: false
+          description: Include metadata default is true
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                # Define the schema for the response JSON here
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string

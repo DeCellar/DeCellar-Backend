@@ -1,0 +1,49 @@
+openapi: 3.0.0
+info:
+  title: Get NFT Creator
+  version: 1.0.0
+paths:
+  /alchemy/nft/getNFTCreator:
+    get:
+      summary: Get NFT creator
+      parameters:
+        - name: alchemyNetwork
+          in: query
+          required: true
+          description: Alchemy network (mainnet, rinkeby, etc.)
+          schema:
+            type: string
+        - name: address
+          in: query
+          required: true
+          description: NFT contract address
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                # Define the schema for the response JSON here
+
+        '404':
+          description: Contract not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string

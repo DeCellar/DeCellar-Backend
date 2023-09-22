@@ -1,0 +1,18 @@
+openapi: 3.0.0
+info:
+  title: Analytics API - getTransactions
+  version: 1.0.0
+paths:
+  /api/analytics/getTransactions:
+    get:
+      summary: Get transaction events
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                - event: Transfer
+                  timestamp: '2023-08-14T12:34:56Z'
+                  from: '0xabcdef123456...'
+                  to: '0x123456abcdef...'

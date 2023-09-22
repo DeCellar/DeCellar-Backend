@@ -1,0 +1,51 @@
+openapi: 3.0.0
+info:
+  title: Get NFTs by Wallet
+  version: 1.0.0
+paths:
+  /alchemy/nft/getNFTByWallet:
+    get:
+      summary: Get NFTs owned by a wallet
+      parameters:
+        - name: alchemyNetwork
+          in: query
+          required: true
+          description: Alchemy network (mainnet, rinkeby, etc.)
+          schema:
+            type: string
+        - name: address
+          in: query
+          required: true
+          description: Wallet address
+          schema:
+            type: string
+        - name: metadata
+          in: query
+          required: false
+          description: Include metadata default is false
+          schema:
+            type: boolean
+        - name: pageSize
+          in: query
+          required: false
+          description: Number of items per page default is 20
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                # Define the schema for the response JSON here
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string

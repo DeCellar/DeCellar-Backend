@@ -1,0 +1,61 @@
+openapi: 3.0.0
+info:
+  title: Get Transaction Both Sides
+  version: 1.0.0
+paths:
+  /alchemy/transfers/getTransactionBothSides:
+    get:
+      summary: Get transfers involving both sides of a transaction
+      parameters:
+        - name: alchemyNetwork
+          in: query
+          required: true
+          description: Alchemy network (mainnet, rinkeby, etc.)
+          schema:
+            type: string
+        - name: fromAddress
+          in: query
+          description: Source address
+          schema:
+            type: string
+        - name: toAddress
+          in: query
+          description: Destination address
+          schema:
+            type: string
+        - name: count
+          in: query
+          description: Number of items per page default is 20
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionBothSidesResponse'
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+components:
+  schemas:
+    Transfer:
+      type: object
+      # Define the properties of a transfer here
+      
+    TransactionBothSidesResponse:
+      type: object
+      properties:
+        transfers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transfer'

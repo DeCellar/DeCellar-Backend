@@ -1,0 +1,25 @@
+# bidBuffer.tsx
+openapi: 3.0.0
+info:
+  title: Set Bid Buffer
+  version: 1.0.0
+paths:
+  /api/marketplace/bidBuffer:
+    post:
+      summary: Set bid buffer
+      parameters:
+        - name: bufferBps
+          in: query
+          required: true
+          schema:
+            type: number
+      responses:
+        200:
+          description: Successfully set bid buffer
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  setBidBuffer:
+                    type: object

@@ -1,0 +1,43 @@
+# getNFTCollections.tsx
+openapi: 3.0.0
+info:
+  title: Get NFT Collections
+  version: 1.0.0
+paths:
+  /api/nft/getNFTCollections:
+    get:
+      summary: Get a list of NFT collections
+      parameters:
+        - name: address
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: chainId
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: special
+          in: query
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully retrieved NFT collections
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nftCollection:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        contract:
+                          type: object
+                        contractType:
+                          type: string
+                        metadata:
+                          type: object

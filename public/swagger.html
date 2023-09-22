@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Multiple Swagger APIs</title>
+    <link rel="stylesheet" type="text/css" href="/swagger-ui/swagger-ui.css">
+</head>
+
+<body>
+    <!-- Container for Swagger UI instances -->
+    <div id="swagger-ui-container"></div>
+
+    <!-- Load Swagger UI script -->
+    <script src="/swagger-ui/swagger-ui-bundle.js"></script>
+
+    <script>
+        // Array of API file paths
+        const apiFiles = [
+            "/Swagger-definitions/alchemy-swagger-definitions/nft-definition/getNFT.yaml",
+            "/Swagger-definitions/alchemy-swagger-definitions/nft-definition/getNFTByCollection.yaml",
+            "/Swagger-definitions/alchemy-swagger-definitions/nft-definition/getNFTByWallet.yaml",
+            "/Swagger-definitions/alchemy-swagger-definitions/nft-definition/getNFTCreator.yaml",
+            "/Swagger-definitions/alchemy-swagger-definitions/token-definition/getWalletTokenBalance.yaml",
+            "/Swagger-definitions/alchemy-swagger-definitions/transfers-definition/getAssetTransfers.yaml",
+            "/Swagger-definitions/alchemy-swagger-definitions/transfers-definition/getTransactionBothSides.yaml",
+            "/Swagger-definitions/analytics-swagger-definitions/getTransactions.yaml",
+            "/Swagger-definitions/analytics-swagger-definitions/listing.yaml",
+            "/Swagger-definitions/analytics-swagger-definitions/nft.yaml",
+            "/Swagger-definitions/analytics-swagger-definitions/transfers.yaml",
+            "/Swagger-definitions/analytics-swagger-definitions/wallet.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/activeListings.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/allActiveListings.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/analytics.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/bidBuffer.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/cancelListing.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/closeAuction.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/createAuction.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/directListing.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/events.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/floorPrice.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/getAll.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/highestBid.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/hotBids.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/index.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/listingById.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/makeOffer.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/nftByCollection.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/offers.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/purchase.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/salesVol.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/salesVolByAddress.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/salesVolType.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/search.yaml",
+            "/Swagger-definitions/marketplace-swagger-definitions/timeBuffer.yaml",
+            "/Swagger-definitions/nft-swagger-definitions/all.yaml",
+            "/Swagger-definitions/nft-swagger-definitions/burn.yaml",
+            "/Swagger-definitions/nft-swagger-definitions/createCollection.yaml",
+            "/Swagger-definitions/nft-swagger-definitions/getCollection.yaml",
+            "/Swagger-definitions/nft-swagger-definitions/getNFTCollections.yaml",
+            "/Swagger-definitions/nft-swagger-definitions/index.yaml",
+            "/Swagger-definitions/nft-swagger-definitions/nftsByCollections.yaml",
+            "/Swagger-definitions/nft-swagger-definitions/owned.yaml",
+            "/Swagger-definitions/nft-swagger-definitions/search.yaml",
+            "/Swagger-definitions/nft-swagger-definitions/signPayload.yaml",
+            "/Swagger-definitions/nft-swagger-definitions/specialNftByCollection.yaml",
+            // Add more API file paths as needed
+        ];
+
+        // Container element where Swagger UI instances will be rendered
+        const container = document.getElementById("swagger-ui-container");
+
+        // Loop through API files and create Swagger UI instances
+        apiFiles.forEach((apiPath, index) => {
+            const divId = `swagger-ui${index + 1}`;
+            const div = document.createElement("div");
+            div.id = divId;
+            container.appendChild(div);
+
+            const ui = SwaggerUIBundle({
+                url: apiPath,
+                dom_id: `#${divId}`,
+                presets: [SwaggerUIBundle.presets.apis],
+                layout: "BaseLayout"
+            });
+        });
+    </script>
+</body>
+
+</html>
