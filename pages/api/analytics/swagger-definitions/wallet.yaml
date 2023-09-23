@@ -1,0 +1,37 @@
+openapi: 3.0.0
+info:
+  title: Analytics API - wallet
+  version: 1.0.0
+paths:
+  /api/analytics/wallet:
+    get:
+      summary: Get wallet analytics
+      parameters:
+        - name: address
+          in: query
+          description: Wallet address
+          required: true
+          schema:
+            type: string
+        - name: chain
+          in: query
+          description: Chain name (e.g., ethereum)
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                nftSold: 150
+                totalSales: 250
+                lastYear: 2022
+                months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                salesLastYear: [15, 25, 10, 20, 18, 12, 14, 19, 22, 28, 30, 36]
+                revenueLastYear: [1500, 2500, 1000, 2000, 1800, 1200, 1400, 1900, 2200, 2800, 3000, 3600]
+                currentYear: 2023
+                salesCurrentYear: [18, 30, 12, 24, 20, 16, 18, 22, 25, 32, 34, 40]
+                revenueCurrentYear: [1800, 3000, 1200, 2400, 2000, 1600, 1800, 2200, 2500, 3200, 3400, 4000]
+                nftCollections: []

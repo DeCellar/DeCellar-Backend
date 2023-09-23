@@ -1,0 +1,31 @@
+openapi: 3.0.0
+info:
+  title: Make Offer
+  version: 1.0.0
+paths:
+  /api/marketplace/makeOffer:
+    post:
+      summary: Make an offer for a listing
+      parameters:
+        - name: listingId
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: pricePerToken
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: quantity
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully made an offer
+          content:
+            application/json:
+              schema:
+                type: object

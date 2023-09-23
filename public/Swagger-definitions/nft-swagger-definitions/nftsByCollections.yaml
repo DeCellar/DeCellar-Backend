@@ -1,0 +1,32 @@
+# nftsByCollection.tsx
+openapi: 3.0.0
+info:
+  title: Get NFTs by Collection
+  version: 1.0.0
+paths:
+  /api/nft/nftsByCollection:
+    get:
+      summary: Get a list of NFTs by collection
+      parameters:
+        - name: collectionAddress
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: chainId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully retrieved NFTs by collection
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nfts:
+                    type: array
+                    items:
+                      type: object

@@ -1,0 +1,30 @@
+openapi: 3.0.0
+info:
+  title: Analytics API - nft
+  version: 1.0.0
+paths:
+  /api/analytics/nft:
+    get:
+      summary: Get analytics for NFTs
+      parameters:
+        - name: address
+          in: query
+          description: Owner's wallet address
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                presentWeek:
+                  nfts: [5, 3, 7, 2, 0, 1, 9]
+                  count: 27
+                lastWeek:
+                  nfts: [3, 1, 4, 0, 2, 1, 6]
+                  count: 17
+                growthPercent: 58.82
+                totalNFT:
+                  count: 55

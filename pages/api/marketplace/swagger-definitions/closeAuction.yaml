@@ -1,0 +1,30 @@
+# closeAuction.tsx
+openapi: 3.0.0
+info:
+  title: Close Auction
+  version: 1.0.0
+paths:
+  /api/marketplace/closeAuction:
+    post:
+      summary: Close an auction listing
+      parameters:
+        - name: _listingId
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: _closeFor
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully closed auction
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  closeAuction:
+                    type: object

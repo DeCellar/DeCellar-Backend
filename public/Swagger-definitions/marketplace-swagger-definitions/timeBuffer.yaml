@@ -1,0 +1,21 @@
+openapi: 3.0.0
+info:
+  title: Set Time Buffer
+  version: 1.0.0
+paths:
+  /api/marketplace/timeBuffer:
+    post:
+      summary: Set time buffer for auctions
+      parameters:
+        - name: bufferInSeconds
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully set time buffer
+          content:
+            application/json:
+              schema:
+                type: object

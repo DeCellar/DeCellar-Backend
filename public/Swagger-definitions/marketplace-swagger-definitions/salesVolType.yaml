@@ -1,0 +1,15 @@
+openapi: 3.0.0
+info:
+  title: Get Sales Volume by Type
+  version: 1.0.0
+paths:
+  /api/marketplace/salesVolType:
+    get:
+      summary: Get sales volume by type
+      responses:
+        200:
+          description: Successfully retrieved sales volume by type
+          content:
+            application/json:
+              schema:
+                type: object

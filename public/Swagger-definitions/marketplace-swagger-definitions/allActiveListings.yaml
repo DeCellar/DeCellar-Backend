@@ -1,0 +1,21 @@
+# allActiveListings.tsx
+openapi: 3.0.0
+info:
+  title: Get All Active Listings
+  version: 1.0.0
+paths:
+  /api/marketplace/allActiveListings:
+    get:
+      summary: Get all active listings
+      responses:
+        200:
+          description: Successfully retrieved all active listings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nfts:
+                    type: array
+                    items:
+                      type: object

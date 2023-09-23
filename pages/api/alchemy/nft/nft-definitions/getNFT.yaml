@@ -1,0 +1,45 @@
+openapi: 3.0.0
+info:
+  title: Get NFT Metadata
+  version: 1.0.0
+paths:
+  /alchemy/nft/getNFT:
+    get:
+      summary: Get NFT Metadata
+      parameters:
+        - name: alchemyNetwork
+          in: query
+          required: true
+          description: Alchemy network (mainnet, rinkeby, etc.)
+          schema:
+            type: string
+        - name: collectionAddress
+          in: query
+          required: true
+          description: Contract address of the NFT collection
+          schema:
+            type: string
+        - name: tokenId
+          in: query
+          required: true
+          description: Token ID of the NFT
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                # Define the schema for the response JSON here
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string

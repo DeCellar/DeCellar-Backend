@@ -1,0 +1,21 @@
+openapi: 3.0.0
+info:
+  title: Get Sales Volume by Asset Contract
+  version: 1.0.0
+paths:
+  /api/marketplace/salesVolByAddress:
+    get:
+      summary: Get sales volume by asset contract
+      parameters:
+        - name: address
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully retrieved sales volume
+          content:
+            application/json:
+              schema:
+                type: object

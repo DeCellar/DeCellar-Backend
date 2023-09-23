@@ -1,0 +1,35 @@
+# search.tsx
+openapi: 3.0.0
+info:
+  title: Search NFT by Token Hash
+  version: 1.0.0
+paths:
+  /api/nft/search:
+    get:
+      summary: Search NFT by token hash
+      parameters:
+        - name: address
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: chain
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: tokenHash
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully retrieved NFT by token hash
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nft:
+                    type: object

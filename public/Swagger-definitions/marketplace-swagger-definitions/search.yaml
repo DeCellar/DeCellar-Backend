@@ -1,0 +1,26 @@
+openapi: 3.0.0
+info:
+  title: Search Listings by Name
+  version: 1.0.0
+paths:
+  /api/marketplace/search:
+    get:
+      summary: Search listings by name
+      parameters:
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully retrieved search results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nfts:
+                    type: array
+                    items:
+                      type: object

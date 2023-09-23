@@ -1,0 +1,25 @@
+# analytics.tsx
+openapi: 3.0.0
+info:
+  title: Get Trading Analytics for Collection
+  version: 1.0.0
+paths:
+  /api/marketplace/analytics:
+    get:
+      summary: Get trading analytics for a collection
+      parameters:
+        - name: address
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully retrieved trading analytics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tradingStats:
+                    type: object

@@ -1,0 +1,30 @@
+# getCollection.tsx
+openapi: 3.0.0
+info:
+  title: Get NFT Collection Metadata
+  version: 1.0.0
+paths:
+  /api/nft/getCollection:
+    get:
+      summary: Get metadata of an NFT collection
+      parameters:
+        - name: address
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: chainId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully retrieved NFT collection metadata
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metadata:
+                    type: object

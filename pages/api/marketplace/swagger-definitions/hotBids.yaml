@@ -1,0 +1,20 @@
+openapi: 3.0.0
+info:
+  title: Get Hot Bids
+  version: 1.0.0
+paths:
+  /api/marketplace/hotBids:
+    get:
+      summary: Get hot bids
+      responses:
+        200:
+          description: Successfully retrieved hot bids
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  hotBids:
+                    type: array
+                    items:
+                      type: object

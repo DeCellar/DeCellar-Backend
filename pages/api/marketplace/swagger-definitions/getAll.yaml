@@ -1,0 +1,20 @@
+openapi: 3.0.0
+info:
+  title: Get All Listings with Bids
+  version: 1.0.0
+paths:
+  /api/marketplace/getAll:
+    get:
+      summary: Get all listings with bids
+      responses:
+        200:
+          description: Successfully retrieved all listings with bids
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  getAllListings:
+                    type: array
+                    items:
+                      type: object

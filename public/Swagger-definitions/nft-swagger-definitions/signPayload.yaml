@@ -1,0 +1,36 @@
+# signPayload.tsx
+openapi: 3.0.0
+info:
+  title: Sign NFT Payload
+  version: 1.0.0
+paths:
+  /api/nft/signPayload:
+    post:
+      summary: Sign NFT payload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                # ... (add other properties as needed)
+              required:
+                - collectionAddress
+                - networkId
+                - address
+                - name
+      responses:
+        200:
+          description: Successfully signed NFT payload
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  signedPayload:
+                    type: string

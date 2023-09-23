@@ -1,0 +1,26 @@
+openapi: 3.0.0
+info:
+  title: Get NFTs by Asset Contract
+  version: 1.0.0
+paths:
+  /api/marketplace/nftByCollection:
+    get:
+      summary: Get NFTs by asset contract
+      parameters:
+        - name: assetContractAddress
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully retrieved NFTs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  getAllListings:
+                    type: array
+                    items:
+                      type: object
