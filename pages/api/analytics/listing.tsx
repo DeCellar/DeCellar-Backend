@@ -3,7 +3,7 @@ import cors from '../../../src/utils/cors';
 import { fPercentChange, fSumArray } from '../../../src/utils/math';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 
-const { MARKETPLACE, NETWORK } = process.env;
+const { MARKETPLACE, NETWORK, PRIVATE_KEY, THIRDWEB_SECRET_KEY } = process.env;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -13,7 +13,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       throw new Error('Missing required environment variables');
     }
 
-    const sdk = new ThirdwebSDK(NETWORK);
+    const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, NETWORK, {
+      secretKey: THIRDWEB_SECRET_KEY,
+    });
     const contract = await sdk.getContract(MARKETPLACE, 'marketplace');
     const listedNFT = await contract.getAllListings();
     const activeListing = await contract.getActiveListings();

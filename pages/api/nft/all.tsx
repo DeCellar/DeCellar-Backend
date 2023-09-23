@@ -3,11 +3,17 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 import cors from '../../../src/utils/cors';
 
-const { NFT_COLLECTION } = process.env;
+const { NFT_COLLECTION, MARKETPLACE, NETWORK, PRIVATE_KEY, THIRDWEB_SECRET_KEY } = process.env;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  await cors(req, res);
   try {
-    await cors(req, res);
+    if (!NETWORK || !MARKETPLACE) {
+      return res.status(500).send('Missing required environment variables');
+    }
+    const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, NETWORK, {
+      secretKey: THIRDWEB_SECRET_KEY,
+    });
 
     if (!NFT_COLLECTION) {
       return res.status(500).send('Missing required environment variables');
@@ -23,7 +29,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ message: 'Missing product name' });
     }
 
-    const sdk = new ThirdwebSDK(chainId as string);
     const contract = await sdk.getContract(NFT_COLLECTION, 'nft-collection');
     const nfts = await contract.getAll();
 

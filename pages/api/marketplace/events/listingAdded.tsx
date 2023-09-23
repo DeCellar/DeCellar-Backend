@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import cors from '../../../src/utils/cors';
+import cors from '../../../../src/utils/cors';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 
-const { MARKETPLACE, NETWORK, PRIVATE_KEY, THIRDWEB_SECRET_KEY } = process.env;
+const { NETWORK, MARKETPLACE } = process.env;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
@@ -10,13 +10,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!NETWORK || !MARKETPLACE) {
       return res.status(500).send('Missing required environment variables');
     }
-    const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, NETWORK, {
-      secretKey: THIRDWEB_SECRET_KEY,
-    });
+
+    const sdk = new ThirdwebSDK(NETWORK);
     const contract = await sdk.getContract(MARKETPLACE, 'marketplace');
-    const { listingId } = req.query;
-    const getOffers = await contract.getOffers(listingId as string);
-    res.status(200).json(getOffers);
+
+    const events = await contract.events.getEvents('ListingAdded');
+
+    res.status(200).json({ events });
   } catch (error) {
     console.error(error);
     return res.status(500).send('Internal Server Error');
