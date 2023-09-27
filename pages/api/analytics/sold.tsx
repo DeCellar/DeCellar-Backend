@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(500).send('Missing required environment variables');
     }
 
-    const userAddress = req.query.userAddress as string; // Get user address from query parameter
+    const userAddress = req.query.address as string;
 
     const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, NETWORK, {
       secretKey: THIRDWEB_SECRET_KEY,
@@ -29,13 +29,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     let totalSoldItems = 0;
     let totalSoldPrice = 0;
 
-    // Create arrays for sold prices of the current week and the previous week
     const currentWeekSoldPrices = new Array(7).fill(0);
     const previousWeekSoldPrices = new Array(7).fill(0);
 
     const currentTime = Math.floor(Date.now() / 1000);
 
-    // Fetch blocks in parallel
     const blockPromises = events.map((event) => provider.getBlock(event.transaction.blockNumber));
     const blocks = await Promise.all(blockPromises);
 
