@@ -8,15 +8,19 @@ const { MARKETPLACE, NETWORK, PRIVATE_KEY, THIRDWEB_SECRET_KEY } = process.env;
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
   try {
-    if (!NETWORK || !MARKETPLACE) {
-      return res.status(500).send('Missing required environment variables');
+    const { network, marketplace, address, name } = req.query;
+
+    if (!network || !marketplace || !address || !name) {
+      return res.status(500).send('Missing required parameters');
     }
-    const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, NETWORK, {
+
+    const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, network as string, {
       secretKey: THIRDWEB_SECRET_KEY,
     });
-    const contract = await sdk.getContract(MARKETPLACE, 'marketplace');
+    const contract = await sdk.getContract(marketplace as string, 'marketplace');
+
     const listings = await contract.getActiveListings();
-    const { name } = req.query;
+
     const cleanQuery = `${name}`.toLowerCase().trim();
     const nfts: any = [];
     listings.forEach((listing: any) => {

@@ -60,12 +60,17 @@ const headers: any = { accept: 'application/json', 'X-API-Key': process.env.MORA
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await cors(req, res);
+
     if (!NETWORK) {
       return res.status(500).send('Missing required environment variables');
     }
-    const { address, chain } = req.query;
+    const { network, marketplace, address } = req.query;
 
-    const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, NETWORK, {
+    if (!network || !marketplace || !address) {
+      return res.status(500).send('Missing required parameters');
+    }
+
+    const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, network as string, {
       secretKey: THIRDWEB_SECRET_KEY,
     });
 
@@ -78,7 +83,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           {
             headers,
             params: {
-              chain,
+              network,
             },
           }
         );

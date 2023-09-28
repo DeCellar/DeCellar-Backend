@@ -16,6 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, NETWORK, {
       secretKey: THIRDWEB_SECRET_KEY,
     });
+
     const contract = await sdk.getContract(NFT_COLLECTION, 'nft-collection');
     const { address } = req.query;
     const nfts: any[] = await contract.getOwned(address as string);

@@ -3,19 +3,19 @@ import cors from '../../../src/utils/cors';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 import { ethers } from 'ethers';
 
-const { NETWORK, MARKETPLACE, PRIVATE_KEY, THIRDWEB_SECRET_KEY } = process.env;
+const { PRIVATE_KEY, THIRDWEB_SECRET_KEY } = process.env;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
 
   try {
-    if (!NETWORK || !MARKETPLACE) {
-      return res.status(500).send('Missing required environment variables');
+    const { network, marketplace, address } = req.query;
+
+    if (!network || !marketplace || !address) {
+      return res.status(500).send('Missing required parameters');
     }
 
-    const userAddress = req.query.address as string;
-
-    const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, NETWORK, {
+    const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, network as string, {
       secretKey: THIRDWEB_SECRET_KEY,
     });
 
@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_API}`
     );
 
-    const contract = await sdk.getContract(MARKETPLACE, 'marketplace');
+    const contract = await sdk.getContract(marketplace as string, 'marketplace');
     const events = await contract.events.getEvents('NewSale');
 
     let totalSoldItems = 0;
@@ -37,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const blockPromises = events.map((event) => provider.getBlock(event.transaction.blockNumber));
     const blocks = await Promise.all(blockPromises);
 
-    const userAddressesSet = new Set([userAddress]);
+    const userAddressesSet = new Set([address]);
 
     for (let i = 0; i < events.length; i++) {
       const event = events[i];
@@ -66,13 +66,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     }
 
-    // Construct the response
+    // Calculate the percentage growth from the previous week
+    const percentageGrowth = calculatePercentageGrowth(
+      currentWeekSoldPrices,
+      previousWeekSoldPrices
+    );
+
     const response = {
-      userAddress: userAddress,
+      userAddress: address,
       totalSoldItems: totalSoldItems,
       totalSoldPrice: totalSoldPrice,
       currentWeekSoldPrices: currentWeekSoldPrices,
       previousWeekSoldPrices: previousWeekSoldPrices,
+      percentageGrowth: percentageGrowth,
     };
 
     res.status(200).json(response);
@@ -80,4 +86,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.error(error);
     return res.status(500).send('Internal Server Error');
   }
+}
+
+// Function to calculate percentage growth
+function calculatePercentageGrowth(currentWeek: number[], previousWeek: number[]): number {
+  const currentWeekTotal = currentWeek.reduce((total, price) => total + price, 0);
+  const previousWeekTotal = previousWeek.reduce((total, price) => total + price, 0);
+
+  if (previousWeekTotal === 0) {
+    return 0; // To avoid division by zero
+  }
+
+  return ((currentWeekTotal - previousWeekTotal) / previousWeekTotal) * 100;
 }

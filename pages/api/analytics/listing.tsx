@@ -3,23 +3,25 @@ import cors from '../../../src/utils/cors';
 import { fPercentChange, fSumArray } from '../../../src/utils/math';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 
-const { MARKETPLACE, NETWORK, PRIVATE_KEY, THIRDWEB_SECRET_KEY } = process.env;
+const { PRIVATE_KEY, THIRDWEB_SECRET_KEY } = process.env;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await cors(req, res);
 
-    if (!NETWORK || !MARKETPLACE) {
-      throw new Error('Missing required environment variables');
+    const { network, marketplace, address } = req.query;
+
+    if (!network || !marketplace || !address) {
+      return res.status(500).send('Missing required parameters');
     }
 
-    const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, NETWORK, {
+    const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, network as string, {
       secretKey: THIRDWEB_SECRET_KEY,
     });
-    const contract = await sdk.getContract(MARKETPLACE, 'marketplace');
+    const contract = await sdk.getContract(marketplace as string, 'marketplace');
+
     const listedNFT = await contract.getAllListings();
     const activeListing = await contract.getActiveListings();
-    const { address } = req.query;
 
     const active = activeListing.filter((listing: any) => listing.sellerAddress.includes(address));
     const listings = listedNFT.filter((listing: any) => listing.sellerAddress.includes(address));

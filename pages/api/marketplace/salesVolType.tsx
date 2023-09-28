@@ -7,24 +7,22 @@ const { MARKETPLACE, NETWORK, PRIVATE_KEY, THIRDWEB_SECRET_KEY } = process.env;
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
   try {
-    if (!NETWORK || !MARKETPLACE) {
-      return res.status(500).send('Missing required environment variables');
+    const { network, marketplace, address } = req.query;
+
+    if (!network || !marketplace || !address) {
+      return res.status(500).send('Missing required parameters');
     }
 
-    const listerAddress = req.query.address as string;
-
-    const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, NETWORK, {
+    const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, network as string, {
       secretKey: THIRDWEB_SECRET_KEY,
     });
-    const contract = await sdk.getContract(MARKETPLACE, 'marketplace');
+    const contract = await sdk.getContract(marketplace as string, 'marketplace');
 
     let events = await contract.events.getEvents('NewSale');
 
     // Filter by lister address if provided
-    if (listerAddress) {
-      events = events.filter(
-        (event) => event.data.lister.toLowerCase() === listerAddress.toLowerCase()
-      );
+    if (address) {
+      events = events.filter((event) => event.data.lister === address);
     }
 
     // Filter sales for type 0 and type 1

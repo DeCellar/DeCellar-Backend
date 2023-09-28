@@ -8,13 +8,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     await cors(req, res);
 
-    const { collectionAddress, address, chainId } = req.query;
+    const { collectionAddress, address, network } = req.query;
 
-    if (!collectionAddress || !address || !chainId) {
+    if (!collectionAddress || !address || !network) {
       return res.status(400).json({ message: 'Missing required parameters' });
     }
 
-    const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, chainId as string, {
+    const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, network as string, {
       secretKey: THIRDWEB_SECRET_KEY,
     });
 

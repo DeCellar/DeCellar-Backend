@@ -4,7 +4,7 @@ import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 import { ethers } from 'ethers';
 import initializeFirebaseServer from '../../../src/firebase/initAdmin';
 
-const { NETWORK, MARKETPLACE, PRIVATE_KEY, THIRDWEB_SECRET_KEY } = process.env;
+const { PRIVATE_KEY, THIRDWEB_SECRET_KEY } = process.env;
 
 type TimeIntervalKeys = '1hr' | '6hr' | '24hr' | '7days' | '30days';
 
@@ -12,19 +12,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   await cors(req, res);
 
   try {
-    if (!NETWORK || !MARKETPLACE) {
-      return res.status(500).send('Missing required environment variables');
+    const { network, marketplace, address, alchemyNetwork } = req.query;
+
+    if (!network || !marketplace || !address) {
+      return res.status(500).send('Missing required parameters');
     }
 
-    const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, NETWORK, {
+    const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, network as string, {
       secretKey: THIRDWEB_SECRET_KEY,
     });
 
     const provider = new ethers.providers.JsonRpcProvider(
-      `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_API}`
+      `https://${alchemyNetwork}}.g.alchemy.com/v2/${process.env.ALCHEMY_API}`
     );
 
-    const contract = await sdk.getContract(MARKETPLACE, 'marketplace');
+    const contract = await sdk.getContract(marketplace as string, 'marketplace');
     const events = await contract.events.getEvents('NewSale');
     const { db } = initializeFirebaseServer();
 
