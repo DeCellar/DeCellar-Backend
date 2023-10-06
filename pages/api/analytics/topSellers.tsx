@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   await cors(req, res);
 
   try {
-    const { network, marketplace, address, alchemyNetwork } = req.query;
+    const { network, marketplace, address, rpc } = req.query;
 
     if (!network || !marketplace || !address) {
       return res.status(500).send('Missing required parameters');
@@ -22,12 +22,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       secretKey: THIRDWEB_SECRET_KEY,
     });
 
-    const provider = new ethers.providers.JsonRpcProvider(
-      `https://${alchemyNetwork}}.g.alchemy.com/v2/${process.env.ALCHEMY_API}`
-    );
+    const provider = new ethers.providers.JsonRpcProvider(rpc as string);
 
     const contract = await sdk.getContract(marketplace as string, 'marketplace');
     const events = await contract.events.getEvents('NewSale');
+
     const { db } = initializeFirebaseServer();
 
     const ownerSales: Record<string, any> = {};
