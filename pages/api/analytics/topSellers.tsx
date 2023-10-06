@@ -12,9 +12,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   await cors(req, res);
 
   try {
-    const { network, marketplace, address, rpc } = req.query;
+    const { network, marketplace, rpc } = req.query;
 
-    if (!network || !marketplace || !address) {
+    if (!network || !marketplace || !rpc) {
       return res.status(500).send('Missing required parameters');
     }
 
