@@ -7,9 +7,9 @@ const nextConfig = {
   },
   env: {
     DEV_API: 'http://localhost:3000',
-    PRODUCTION_API: process.env.PRODUCTION_API,
+    PRODUCTION_API: 'https://api.decellar.it',
     DEV_DOMAIN: 'http://localhost:8081',
-    PRODUCTION_DOMAIN: process.env.PRODUCTION_DOMAIN,
+    PRODUCTION_DOMAIN: 'https://www.decellar.io',
 
     PRIVATE_KEY: process.env.PRIVATE_KEY,
     // FIREBASE
