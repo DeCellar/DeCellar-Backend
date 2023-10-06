@@ -18,16 +18,16 @@
     "start": "next start"
   },
   "dependencies": {
-    "@thirdweb-dev/auth": "^3.2.42",
+    "@thirdweb-dev/auth": "^3.2.46",
     "@thirdweb-dev/sdk": "^3.9.0",
-    "axios": "^1.5.0",
+    "axios": "^1.5.1",
     "change-case": "^4.1.2",
     "cors": "^2.8.5",
     "date-fns": "^2.30.0",
     "ethers": "5",
-    "firebase-admin": "^11.10.1",
+    "firebase-admin": "^11.11.0",
     "lodash": "^4.17.21",
-    "next": "^13.5.2",
+    "next": "^13.5.4",
     "openai": "^3.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -37,12 +37,12 @@
   "devDependencies": {
     "@types/cors": "^2.8.14",
     "@types/lodash": "^4.14.199",
-    "@types/node": "^18.17.18",
+    "@types/node": "^18.18.3",
     "@types/react": "18.2.22",
     "@types/uuid": "^9.0.4",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "eslint": "^8.50.0",
-    "eslint-config-next": "^13.5.2",
+    "eslint-config-next": "^13.5.4",
     "eslint-config-prettier": "^8.10.0",
     "typescript": "^5.2.2"
   }
