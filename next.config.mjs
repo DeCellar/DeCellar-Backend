@@ -5,6 +5,7 @@ const nextConfig = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
+
   env: {
     DEV_API: 'http://localhost:3000',
     PRODUCTION_API: 'https://api.decellar.it',
@@ -42,6 +43,7 @@ const nextConfig = {
     THIRDWEB_SECRET_KEY: process.env.THIRDWEB_SECRET_KEY,
     THIRDWEB_CLIENT_ID: process.env.THIRDWEB_CLIENT_ID,
   },
+  serverTimeout: 7000,
 };
 
 export default nextConfig;
