@@ -16,28 +16,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, network as string, {
       secretKey: THIRDWEB_SECRET_KEY,
     });
-    const contract = await sdk.getContract(marketplace as string, 'marketplace');
-    const {
-      assetContractAddress,
-      tokenId,
-      startTimestamp,
-      listingDurationInSeconds,
-      quantity,
-      currencyContractAddress,
-      buyoutPricePerToken,
-    } = req.query;
+    const contract = await sdk.getContract(marketplace as string, 'marketplace-v3');
 
-    const listing = {
-      assetContractAddress,
-      tokenId,
-      startTimestamp,
-      listingDurationInSeconds,
-      quantity,
-      currencyContractAddress,
-      buyoutPricePerToken,
-    };
-    const directListing = await contract?.direct.createListing(listing as any);
-    res.status(200).json({ directListing });
+    const result = await contract.englishAuctions.getAll();
+
+    res.status(200).json({ result });
   } catch (error) {
     console.error(error);
     return res.status(500).send('Internal Server Error');

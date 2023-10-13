@@ -25,6 +25,7 @@ const nextConfig = {
     // NFT
     NFT_COLLECTION: process.env.NFT_COLLECTION,
     MARKETPLACE: process.env.MARKETPLACE,
+    MARKETPLACEV3: process.env.MARKETPLACEV3,
 
     EMAIL_OCTOPUS_API: process.env.EMAIL_OCTOPUS_API,
     EMAIL_OCTOPUS_LIST_ID: process.env.EMAIL_OCTOPUS_LIST_ID,
