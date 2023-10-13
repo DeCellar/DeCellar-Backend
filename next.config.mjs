@@ -5,11 +5,12 @@ const nextConfig = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
+
   env: {
     DEV_API: 'http://localhost:3000',
-    PRODUCTION_API: process.env.PRODUCTION_API,
+    PRODUCTION_API: 'https://api.decellar.it',
     DEV_DOMAIN: 'http://localhost:8081',
-    PRODUCTION_DOMAIN: process.env.PRODUCTION_DOMAIN,
+    PRODUCTION_DOMAIN: 'https://www.decellar.io',
 
     PRIVATE_KEY: process.env.PRIVATE_KEY,
     // FIREBASE
@@ -24,6 +25,7 @@ const nextConfig = {
     // NFT
     NFT_COLLECTION: process.env.NFT_COLLECTION,
     MARKETPLACE: process.env.MARKETPLACE,
+    MARKETPLACEV3: process.env.MARKETPLACEV3,
 
     EMAIL_OCTOPUS_API: process.env.EMAIL_OCTOPUS_API,
     EMAIL_OCTOPUS_LIST_ID: process.env.EMAIL_OCTOPUS_LIST_ID,
@@ -42,6 +44,7 @@ const nextConfig = {
     THIRDWEB_SECRET_KEY: process.env.THIRDWEB_SECRET_KEY,
     THIRDWEB_CLIENT_ID: process.env.THIRDWEB_CLIENT_ID,
   },
+  serverTimeout: 7000,
 };
 
 export default nextConfig;
