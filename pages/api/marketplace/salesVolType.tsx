@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import cors from '../../../src/utils/cors';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 
-const { MARKETPLACE, NETWORK, PRIVATE_KEY, THIRDWEB_SECRET_KEY } = process.env;
+const { PRIVATE_KEY, THIRDWEB_SECRET_KEY } = process.env;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, network as string, {
       secretKey: THIRDWEB_SECRET_KEY,
     });
-    const contract = await sdk.getContract(marketplace as string, 'marketplace');
+    const contract = await sdk.getContract(marketplace as string, 'marketplace-v3');
 
     let events = await contract.events.getEvents('NewSale');
 
@@ -31,11 +31,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     for (const sale of events) {
       const listingId = Number(sale.data.listingId);
-      const listing = await contract.getListing(listingId.toString());
 
-      if (listing.type === 0) {
+      const [auctionResult, directResult] = await Promise.allSettled([
+        contract.englishAuctions.getAuction(listingId),
+        contract.directListings.getListing(listingId),
+      ]);
+
+      if (auctionResult) {
         type0Sales.push(sale);
-      } else if (listing.type === 1) {
+      }
+      if (directResult) {
         type1Sales.push(sale);
       }
     }

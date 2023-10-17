@@ -7,9 +7,9 @@ const { PRIVATE_KEY, THIRDWEB_SECRET_KEY } = process.env;
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
   try {
-    const { network, marketplace, address } = req.query;
+    const { network, marketplace } = req.query;
 
-    if (!network || !marketplace || !address) {
+    if (!network || !marketplace) {
       return res.status(500).send('Missing required parameters');
     }
 
