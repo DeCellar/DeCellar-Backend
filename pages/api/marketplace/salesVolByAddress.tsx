@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, network as string, {
       secretKey: THIRDWEB_SECRET_KEY,
     });
-    const contract = await sdk.getContract(marketplace as string, 'marketplace');
+    const contract = await sdk.getContract(marketplace as string, 'marketplace-v3');
 
     const events = await contract.events.getEvents('NewSale');
     const salesForAssetContract = events.filter((event) => event.data.assetContract === address);

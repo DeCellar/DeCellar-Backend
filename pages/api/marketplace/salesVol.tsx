@@ -7,16 +7,16 @@ const { PRIVATE_KEY, THIRDWEB_SECRET_KEY } = process.env;
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res);
   try {
-    const { network, marketplace, address } = req.query;
+    const { network, marketplace } = req.query;
 
-    if (!network || !marketplace || !address) {
+    if (!network || !marketplace) {
       return res.status(500).send('Missing required parameters');
     }
 
     const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY as string, network as string, {
       secretKey: THIRDWEB_SECRET_KEY,
     });
-    const contract = await sdk.getContract(marketplace as string, 'marketplace');
+    const contract = await sdk.getContract(marketplace as string, 'marketplace-v3');
 
     const events = await contract.events.getEvents('NewSale');
 
@@ -34,7 +34,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const listingId = Number(sale.data.listingId);
       const quantityBought = Number(sale.data.quantityBought);
       const totalPricePaid = Number(sale.data.totalPricePaid) / decimalFactor; // Convert to USDT
-      const listing = await contract.getListing(listingId.toString());
+      const listing = await contract.englishAuctions.getAuction(listingId.toString());
+      const direct = await contract.directListings.getListing(listingId.toString());
 
       formattedSales.push({
         listingId,
