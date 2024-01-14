@@ -40,6 +40,7 @@ const nextConfig = {
     COINMARKET_API: process.env.COINMARKET_API,
 
     OPENAI_API: process.env.OPENAI_API,
+    CHATGPT_ASSISTANT: process.env.CHATGPT_ASSISTANT,
 
     THIRDWEB_SECRET_KEY: process.env.THIRDWEB_SECRET_KEY,
     THIRDWEB_CLIENT_ID: process.env.THIRDWEB_CLIENT_ID,
